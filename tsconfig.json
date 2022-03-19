@@ -3,13 +3,13 @@
     "module": "commonjs",
     "noImplicitReturns": true,
     "noUnusedLocals": true,
-    "outDir": "lib",
+    "outDir": "dist/",
     "sourceMap": true,
     "strict": true,
-    "target": "es2017",
+    "target": "es2020",
     "allowJs": true,
     "resolveJsonModule": true,
-    "types": ["jest", "node"]
+    "types": ["node"]
   },
   "compileOnSave": true,
   "include": ["src"]

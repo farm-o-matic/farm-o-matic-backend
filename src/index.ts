@@ -1,8 +1,9 @@
-import express from 'express'
+import {Response,Application} from 'express'
+import * as express from 'express'
 
-const app = express()
+const app:Application = express()
 
-app.get('/', (req, res) => {
+app.get('/', (req, res:Response) => {
     res.send('Well done!')
 })
 

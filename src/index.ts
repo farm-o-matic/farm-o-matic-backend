@@ -1,12 +1,12 @@
-import {Response,Application} from 'express'
+import {Request,Response,Application} from 'express'
 import * as express from 'express'
 
 const app:Application = express()
-
-app.get('/', (req, res:Response) => {
+const port:Number = 3000
+app.get('/', (req:Request, res:Response) => {
     res.send('Well done!')
 })
 
-app.listen(3000, () => {
-console.log('The application is listening odasdasdasdn port 3000!')
+app.listen(port, () => {
+console.log(`The application is listening on port ${port}!`)
 })

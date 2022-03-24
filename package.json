@@ -33,9 +33,8 @@
     "@types/pg-promise": "^5.4.3",
     "express": "^4.17.3",
     "jsonwebtoken": "^8.5.1",
+    "nodemon": "^2.0.15",
     "pg-promise": "^10.11.1",
-    "prisma": "^3.11.0",
-    "nodemon": "^2.0.15"
-
+    "prisma": "^3.11.0"
   }
 }

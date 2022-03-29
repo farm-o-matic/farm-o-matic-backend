@@ -19,7 +19,7 @@ app.get('/viewpresets', async (req, res) => {
     const presets = await prisma.planterboxsettings.findMany({
         where: { 
             SettingsID: {
-                startsWith: '701' 
+                startsWith: '701' //SettingsID of presets start are from 701,000,000 to 701,999,999
             }
         }
     })

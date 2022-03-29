@@ -1,0 +1,134 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model commentreply {
+  replyID   BigInt   @id
+  contents  String   @db.Text
+  votes     Int
+  Datetime  DateTime @db.DateTime(0)
+  replyerID Int
+  commentID BigInt
+  comments  comments @relation(fields: [commentID], references: [commentID], onDelete: NoAction, onUpdate: NoAction, map: "commentreply_ibfk_2")
+  user      user     @relation(fields: [replyerID], references: [UserID], onDelete: NoAction, onUpdate: NoAction, map: "commentreply_ibfk_1")
+
+  @@index([commentID], map: "commentID")
+  @@index([replyerID], map: "replyerID")
+}
+
+model comments {
+  commentID    BigInt         @id
+  datetime     DateTime       @db.DateTime(0)
+  contents     String         @db.Text
+  votes        Int
+  commenterID  Int
+  postID       BigInt
+  user         user           @relation(fields: [commenterID], references: [UserID], onDelete: NoAction, onUpdate: NoAction, map: "comments_ibfk_1")
+  post         post           @relation(fields: [postID], references: [PostID], onDelete: NoAction, onUpdate: NoAction, map: "comments_ibfk_2")
+  commentreply commentreply[]
+
+  @@index([commenterID], map: "commenterID")
+  @@index([postID], map: "postID")
+}
+
+model pesticideschedule {
+  time               DateTime           @db.Time(0)
+  settingsID         Int
+  frequency          Int
+  planterboxsettings planterboxsettings @relation(fields: [settingsID], references: [SettingsID], onDelete: NoAction, onUpdate: NoAction, map: "pesticideschedule_ibfk_1")
+
+  @@id([time, settingsID])
+  @@index([settingsID], map: "settingID")
+}
+
+model planterbox {
+  boxID              BigInt              @id
+  boxname            String?             @db.VarChar(127)
+  ownerID            Int
+  settingsID         Int?
+  user               user                @relation(fields: [ownerID], references: [UserID], onDelete: NoAction, onUpdate: NoAction, map: "planterbox_ibfk_1")
+  planterboxsettings planterboxsettings? @relation(fields: [settingsID], references: [SettingsID], onDelete: NoAction, onUpdate: NoAction, map: "planterbox_ibfk_2")
+
+  @@index([ownerID], map: "ownerID")
+  @@index([settingsID], map: "settingsID")
+}
+
+model planterboxsettings {
+  SettingsID        Int                             @id
+  SettingName       String?                         @db.VarChar(127)
+  wateringMode      planterboxsettings_wateringMode
+  minTemp           Float                           @db.Float
+  maxTemp           Float                           @db.Float
+  minMoisture       Float                           @db.Float
+  maxMoisture       Float                           @db.Float
+  minLightIntensity Float                           @db.Float
+  maxLightIntensity Float                           @db.Float
+  pesticideschedule pesticideschedule[]
+  planterbox        planterbox[]
+  wateringschedule  wateringschedule[]
+}
+
+model post {
+  PostID   BigInt     @id
+  contents String     @db.Text
+  datetime DateTime   @db.DateTime(0)
+  title    String     @db.VarChar(255)
+  votes    Int
+  posterID Int
+  user     user       @relation(fields: [posterID], references: [UserID], onDelete: NoAction, onUpdate: NoAction, map: "post_ibfk_1")
+  comments comments[]
+
+  @@index([posterID], map: "posterID")
+}
+
+model sensordata {
+  BoxID          BigInt
+  DateTime       DateTime @db.DateTime(0)
+  Moisture       Float    @db.Float
+  Temperature    Float    @db.Float
+  LightIntensity Float    @db.Float
+
+  @@id([BoxID, DateTime])
+}
+
+model user {
+  UserID       Int            @id
+  Email        String         @db.VarChar(127)
+  UserName     String         @db.VarChar(16)
+  Password     String         @db.VarChar(16)
+  Picture      Bytes?         @db.Blob
+  TotalUpvotes Int
+  commentreply commentreply[]
+  comments     comments[]
+  planterbox   planterbox[]
+  post         post[]
+}
+
+model wateringschedule {
+  time               DateTime           @db.Time(0)
+  settingsID         Int
+  planterboxsettings planterboxsettings @relation(fields: [settingsID], references: [SettingsID], onDelete: NoAction, onUpdate: NoAction, map: "wateringschedule_ibfk_1")
+
+  @@id([time, settingsID])
+  @@index([settingsID], map: "settingID")
+}
+
+model wikientry {
+  entryID       Int    @id
+  plantname     String @db.VarChar(255)
+  plantdesc     String @db.Text
+  fertilizer    String @db.Text
+  pesticide     String @db.Text
+  amountofwater String @db.Text
+}
+
+enum planterboxsettings_wateringMode {
+  Manual
+  Schedule
+  Auto
+}

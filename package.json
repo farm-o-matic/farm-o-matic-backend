@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "tsc && node lib/index.js",
-    "serve":"nodemon --exec \"npm run start\""
+    "serve": "nodemon --exec \"npm run start\""
   },
   "keywords": [],
   "author": "",
@@ -24,10 +24,12 @@
     "eslint-plugin-promise": "^5.2.0",
     "husky": "^7.0.4",
     "nodemon": "^2.0.15",
+    "prisma": "^3.11.1",
     "ts-node": "^10.7.0",
     "typescript": "^4.6.2"
   },
   "dependencies": {
+    "@prisma/client": "^3.11.1",
     "express": "^4.17.3"
   }
 }

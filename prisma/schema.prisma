@@ -39,6 +39,7 @@ model comments {
 model pesticideschedule {
   time               DateTime           @db.Time(0)
   settingsID         String             @db.Char(9)
+  Interval           Int
   planterboxsettings planterboxsettings @relation(fields: [settingsID], references: [SettingsID], onDelete: NoAction, onUpdate: NoAction, map: "pesticideschedule_ibfk_1")
 
   @@id([time, settingsID])
@@ -47,7 +48,6 @@ model pesticideschedule {
 
 model planterbox {
   boxID              String              @id @db.Char(12)
-  boxname            String?             @db.VarChar(127)
   ownerID            String              @db.Char(9)
   settingsID         String?             @db.Char(9)
   user               user                @relation(fields: [ownerID], references: [UserID], onDelete: NoAction, onUpdate: NoAction, map: "planterbox_ibfk_1")
@@ -58,18 +58,22 @@ model planterbox {
 }
 
 model planterboxsettings {
-  SettingsID        String                          @id @db.Char(9)
-  SettingName       String?                         @db.VarChar(127)
-  wateringMode      planterboxsettings_wateringMode
-  minTemp           Float                           @db.Float
-  maxTemp           Float                           @db.Float
-  minMoisture       Float                           @db.Float
-  maxMoisture       Float                           @db.Float
-  minLightIntensity Float                           @db.Float
-  maxLightIntensity Float                           @db.Float
-  pesticideschedule pesticideschedule[]
-  planterbox        planterbox[]
-  wateringschedule  wateringschedule[]
+  SettingsID         String                          @id @db.Char(9)
+  SettingName        String?                         @db.VarChar(127)
+  wateringMode       planterboxsettings_wateringMode
+  minMoisture        Float                           @db.Float
+  maxMoisture        Float                           @db.Float
+  minLightIntensity  Float                           @db.Float
+  maxLightIntensity  Float                           @db.Float
+  lightingMode       planterboxsettings_lightingMode
+  lightStartTime     DateTime                        @db.Time(0)
+  lightStopTime      DateTime                        @db.Time(0)
+  lightPower         Int
+  lightStatus        planterboxsettings_lightStatus
+  fertilizerschedule fertilizerschedule[]
+  pesticideschedule  pesticideschedule[]
+  planterbox         planterbox[]
+  wateringschedule   wateringschedule[]
 }
 
 model post {
@@ -124,10 +128,32 @@ model wikientry {
   fertilizer    String @db.Text
   pesticide     String @db.Text
   amountofwater String @db.Text
+  LightExposure String @db.Text
+}
+
+model fertilizerschedule {
+  Time               DateTime           @db.Time(0)
+  SettingsID         String             @db.Char(9)
+  Interval           Int
+  planterboxsettings planterboxsettings @relation(fields: [SettingsID], references: [SettingsID], onDelete: NoAction, onUpdate: NoAction, map: "fertilizerschedule_ibfk_1")
+
+  @@id([Time, SettingsID])
+  @@index([SettingsID], map: "SettingsID")
 }
 
 enum planterboxsettings_wateringMode {
   Manual
   Schedule
   Auto
+}
+
+enum planterboxsettings_lightingMode {
+  Manual
+  Schedule
+  Auto
+}
+
+enum planterboxsettings_lightStatus {
+  ON
+  OFF
 }

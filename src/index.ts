@@ -15,7 +15,7 @@ app.get('/', (req:Request, res:Response) => {
 })
 
 // view list of plant profile (settings preset)
-app.get('/viewpresets', async (req, res) => {
+app.get('/viewPresets', async (req, res) => {
     const presets = await prisma.planterboxsettings.findMany({
         where: { 
             SettingsID: {
@@ -24,6 +24,35 @@ app.get('/viewpresets', async (req, res) => {
         }
     })
     res.json(presets)
+})
+
+// create new plant profile (settings preset)
+app.post('/createPreset', async (req, res) => {
+    const { SettingsID, SettingName, wateringMode, minMoisture, maxMoisture, 
+            minLightIntensity, maxLightIntensity, lightingMode, lightStartTime, lightStopTime, 
+            lightPower, lightStatus} = req.body
+    const result = await prisma.planterboxsettings.create({
+        data: {
+            SettingsID: SettingsID,
+            SettingName: SettingName,
+            wateringMode: wateringMode,
+            minMoisture: minMoisture,
+            maxMoisture: maxMoisture,
+            minLightIntensity: minLightIntensity,
+            maxLightIntensity: maxLightIntensity,
+            lightingMode: lightingMode,
+            lightStartTime: lightStartTime,
+            lightStopTime: lightStopTime,
+            lightPower: lightPower,
+            lightStatus: lightStatus
+        }
+    })
+    res.json(result)
+})
+
+// update box settings
+app.put('/updateBoxSettings', async (req, res) => {
+    
 })
 
 app.listen(port, () => {

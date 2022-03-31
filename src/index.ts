@@ -29,8 +29,9 @@ app.get('/viewPresets', async (req, res) => {
 // create new plant profile (settings preset)
 app.post('/createPreset', async (req, res) => {
     const { SettingsID, SettingName, wateringMode, minMoisture, maxMoisture, 
-            minLightIntensity, maxLightIntensity, lightingMode, lightStartTime, lightStopTime, 
-            lightPower, lightStatus} = req.body
+            minLightIntensity, maxLightIntensity, lightingMode, lightStartTime, 
+            lightStopTime, lightPower, lightStatus} = req.body
+
     const result = await prisma.planterboxsettings.create({
         data: {
             SettingsID: SettingsID,
@@ -51,8 +52,33 @@ app.post('/createPreset', async (req, res) => {
 })
 
 // update box settings
-app.put('/updateBoxSettings', async (req, res) => {
-    
+app.put('/updateBoxSettings/', async (req, res) => {
+    const { SettingsID, SettingName, wateringMode, minMoisture, maxMoisture, 
+            minLightIntensity, maxLightIntensity, lightingMode, lightStartTime, 
+            lightStopTime, lightPower, lightStatus} = req.body
+
+    try {
+        const settings = await prisma.planterboxsettings.update({
+        where: { SettingsID: SettingsID },
+            data: {
+                SettingName: SettingName,
+                wateringMode: wateringMode,
+                minMoisture: minMoisture,
+                maxMoisture: maxMoisture,
+                minLightIntensity: minLightIntensity,
+                maxLightIntensity: maxLightIntensity,
+                lightingMode: lightingMode,
+                lightStartTime: lightStartTime,
+                lightStopTime: lightStopTime,
+                lightPower: lightPower,
+                lightStatus: lightStatus
+        },
+    })
+
+    res.json(settings)
+  } catch (error) {
+    res.json({ error: `Settings with ID ${SettingsID} does not exist in the database` })
+  }
 })
 
 app.listen(port, () => {

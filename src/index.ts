@@ -83,8 +83,18 @@ app.put('planterboxes/settings/:id/updateBoxSettings/', async (req, res) => {
 
 // create new watering schedule
 app.post('/planterboxes/settings/:id/addWateringSchedule', async (req, res) => {
-    
+    const { id } = req.params
+    const { time } = req.body
+    const schedule = await prisma.wateringschedule.create({
+        data: {
+            SettingsID: Number(id),
+            time: time
+        }
+    })
+    res.json(schedule)
 })
+
+// update watering schedule
 
 
 app.listen(port, () => {

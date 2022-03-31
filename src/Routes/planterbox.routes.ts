@@ -1,10 +1,21 @@
 import { Router } from 'express'
 import { Request, Response } from 'express'
-import { register } from '../Controllers/users.controller'
 import { prisma } from "../helper/prisma.client"
 const router = Router()
 
-router.get('/register', register)
+router.get('/:id/setting', async(req: Request, res: Response) =>{
+    const { id } = req.params
+    const settingID = await prisma.planterbox.findUnique({
+        where: {
+            boxID: Number(id),
+        }
+    })
+    const setting = await prisma.planterboxsettings.findUnique({
+        where: {
+            SettingsID: setting
+        }
+    })
+}), 
 
 router.get('/me', async (req: Request, res: Response) => {
     return res.json({ "Status": "ok users" })

@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,29 +7,156 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Post {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  title     String   @db.VarChar(255)
-  content   String?
-  published Boolean  @default(false)
-  author    User     @relation(fields: [authorId], references: [id])
-  authorId  Int
+model commentreply {
+  replyID   Int      @id @default(autoincrement())
+  contents  String   @db.Text
+  votes     Int
+  Datetime  DateTime @db.DateTime(0)
+  replyerID Int
+  commentID Int
+  comments  comments @relation(fields: [commentID], references: [commentID], onDelete: Cascade, onUpdate: NoAction, map: "commentreply_ibfk_2")
+  user      user     @relation(fields: [replyerID], references: [UserID], onDelete: NoAction, onUpdate: NoAction, map: "commentreply_ibfk_1")
+
+  @@index([commentID], map: "commentID")
+  @@index([replyerID], map: "replyerID")
 }
 
-model Profile {
-  id     Int     @id @default(autoincrement())
-  bio    String?
-  user   User    @relation(fields: [userId], references: [id])
-  userId Int     @unique
+model comments {
+  commentID    Int            @id @default(autoincrement())
+  datetime     DateTime       @db.DateTime(0)
+  contents     String         @db.Text
+  votes        Int
+  commenterID  Int
+  postID       Int
+  user         user           @relation(fields: [commenterID], references: [UserID], onDelete: NoAction, onUpdate: NoAction, map: "comments_ibfk_1")
+  post         post           @relation(fields: [postID], references: [PostID], onDelete: Cascade, onUpdate: NoAction, map: "comments_ibfk_2")
+  commentreply commentreply[]
+
+  @@index([commenterID], map: "commenterID")
+  @@index([postID], map: "postID")
 }
 
-model User {
-  id      Int      @id @default(autoincrement())
-  email   String   @unique
-  password String
-  name    String?
-  posts   Post[]
-  profile Profile?
+model fertilizerschedule {
+  time               DateTime           @db.Time(0)
+  SettingsID         Int
+  Interval           Int
+  planterboxsettings planterboxsettings @relation(fields: [SettingsID], references: [SettingsID], onDelete: Cascade, onUpdate: NoAction, map: "fertilizerschedule_ibfk_1")
+
+  @@id([time, SettingsID])
+  @@index([SettingsID], map: "SettingsID")
+}
+
+model pesticideschedule {
+  time               DateTime           @db.Time(0)
+  SettingsID         Int
+  Interval           Int
+  planterboxsettings planterboxsettings @relation(fields: [SettingsID], references: [SettingsID], onDelete: Cascade, onUpdate: NoAction, map: "pesticideschedule_ibfk_1")
+
+  @@id([time, SettingsID])
+  @@index([SettingsID], map: "SettingsID")
+}
+
+model planterbox {
+  boxID              Int                 @id @default(autoincrement())
+  ownerID            Int
+  SettingsID         Int?
+  planterboxsettings planterboxsettings? @relation(fields: [SettingsID], references: [SettingsID], onUpdate: NoAction, map: "planterbox_ibfk_2")
+  user               user                @relation(fields: [ownerID], references: [UserID], onDelete: Cascade, onUpdate: NoAction, map: "planterbox_ibfk_1")
+  sensordata         sensordata[]
+
+  @@index([SettingsID], map: "SettingsID")
+  @@index([ownerID], map: "ownerID")
+}
+
+model planterboxsettings {
+  SettingsID         Int                             @id @default(autoincrement())
+  SettingName        String?                         @db.VarChar(127)
+  wateringMode       planterboxsettings_wateringMode
+  minMoisture        Float                           @db.Float
+  maxMoisture        Float                           @db.Float
+  minLightIntensity  Float                           @db.Float
+  maxLightIntensity  Float                           @db.Float
+  lightingMode       planterboxsettings_lightingMode
+  lightStartTime     DateTime                        @db.Time(0)
+  lightStopTime      DateTime                        @db.Time(0)
+  lightPower         Int
+  lightStatus        planterboxsettings_lightStatus
+  fertilizerschedule fertilizerschedule[]
+  pesticideschedule  pesticideschedule[]
+  planterbox         planterbox[]
+  wateringschedule   wateringschedule[]
+}
+
+model post {
+  PostID   Int        @id @default(autoincrement())
+  contents String     @db.Text
+  datetime DateTime   @db.DateTime(0)
+  title    String     @db.VarChar(255)
+  votes    Int
+  posterID Int
+  user     user       @relation(fields: [posterID], references: [UserID], onDelete: NoAction, onUpdate: NoAction, map: "post_ibfk_1")
+  comments comments[]
+
+  @@index([posterID], map: "posterID")
+}
+
+model sensordata {
+  BoxID          Int
+  DateTime       DateTime   @db.DateTime(0)
+  Moisture       Float      @db.Float
+  Temperature    Float      @db.Float
+  LightIntensity Float      @db.Float
+  planterbox     planterbox @relation(fields: [BoxID], references: [boxID], onDelete: Cascade, onUpdate: NoAction, map: "sensordata_ibfk_1")
+
+  @@id([BoxID, DateTime])
+  @@index([BoxID], map: "BoxID")
+}
+
+model user {
+  UserID       Int            @id @default(autoincrement())
+  Email        String         @db.VarChar(127)
+  UserName     String         @db.VarChar(16)
+  Password     String         @db.VarChar(16)
+  Picture      Bytes?         @db.Blob
+  TotalUpvotes Int
+  commentreply commentreply[]
+  comments     comments[]
+  planterbox   planterbox[]
+  post         post[]
+}
+
+model wateringschedule {
+  time               DateTime           @db.Time(0)
+  SettingsID         Int
+  planterboxsettings planterboxsettings @relation(fields: [SettingsID], references: [SettingsID], onDelete: Cascade, onUpdate: NoAction, map: "wateringschedule_ibfk_1")
+
+  @@id([time, SettingsID])
+  @@index([SettingsID], map: "SettingsID")
+}
+
+model wikientry {
+  entryID       Int    @id @default(autoincrement())
+  plantname     String @db.VarChar(255)
+  plantdesc     String @db.Text
+  fertilizer    String @db.Text
+  pesticide     String @db.Text
+  amountofwater String @db.Text
+  LightExposure String @db.Text
+}
+
+enum planterboxsettings_wateringMode {
+  Manual
+  Schedule
+  Auto
+}
+
+enum planterboxsettings_lightingMode {
+  Manual
+  Schedule
+  Auto
+}
+
+enum planterboxsettings_lightStatus {
+  ON
+  OFF
 }

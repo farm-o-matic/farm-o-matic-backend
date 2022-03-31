@@ -24,17 +24,17 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.2.0",
     "husky": "^7.0.4",
+    "prisma": "^3.11.1",
     "ts-node": "^10.7.0",
     "typescript": "^4.6.2"
   },
   "dependencies": {
-    "@prisma/client": "^3.11.0",
+    "@prisma/client": "^3.11.1",
     "@types/jsonwebtoken": "^8.5.8",
     "@types/pg-promise": "^5.4.3",
     "express": "^4.17.3",
     "jsonwebtoken": "^8.5.1",
     "nodemon": "^2.0.15",
-    "pg-promise": "^10.11.1",
-    "prisma": "^3.11.0"
+    "pg-promise": "^10.11.1"
   }
 }

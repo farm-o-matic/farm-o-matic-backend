@@ -8,13 +8,13 @@ datasource db {
 }
 
 model commentreply {
-  replyID   String   @id @db.Char(12)
+  replyID   Int      @id @default(autoincrement())
   contents  String   @db.Text
   votes     Int
   Datetime  DateTime @db.DateTime(0)
-  replyerID String   @db.Char(9)
-  commentID String   @db.Char(12)
-  comments  comments @relation(fields: [commentID], references: [commentID], onDelete: NoAction, onUpdate: NoAction, map: "commentreply_ibfk_2")
+  replyerID Int
+  commentID Int
+  comments  comments @relation(fields: [commentID], references: [commentID], onDelete: Cascade, onUpdate: NoAction, map: "commentreply_ibfk_2")
   user      user     @relation(fields: [replyerID], references: [UserID], onDelete: NoAction, onUpdate: NoAction, map: "commentreply_ibfk_1")
 
   @@index([commentID], map: "commentID")
@@ -22,14 +22,14 @@ model commentreply {
 }
 
 model comments {
-  commentID    String         @id @db.Char(12)
+  commentID    Int            @id @default(autoincrement())
   datetime     DateTime       @db.DateTime(0)
   contents     String         @db.Text
   votes        Int
-  commenterID  String         @db.Char(9)
-  postID       String         @db.Char(12)
+  commenterID  Int
+  postID       Int
   user         user           @relation(fields: [commenterID], references: [UserID], onDelete: NoAction, onUpdate: NoAction, map: "comments_ibfk_1")
-  post         post           @relation(fields: [postID], references: [PostID], onDelete: NoAction, onUpdate: NoAction, map: "comments_ibfk_2")
+  post         post           @relation(fields: [postID], references: [PostID], onDelete: Cascade, onUpdate: NoAction, map: "comments_ibfk_2")
   commentreply commentreply[]
 
   @@index([commenterID], map: "commenterID")
@@ -38,27 +38,28 @@ model comments {
 
 model pesticideschedule {
   time               DateTime           @db.Time(0)
-  settingsID         String             @db.Char(9)
+  SettingsID         Int
   Interval           Int
-  planterboxsettings planterboxsettings @relation(fields: [settingsID], references: [SettingsID], onDelete: NoAction, onUpdate: NoAction, map: "pesticideschedule_ibfk_1")
+  planterboxsettings planterboxsettings @relation(fields: [SettingsID], references: [SettingsID], onDelete: Cascade, onUpdate: NoAction, map: "pesticideschedule_ibfk_1")
 
-  @@id([time, settingsID])
-  @@index([settingsID], map: "settingsID")
+  @@id([time, SettingsID])
+  @@index([SettingsID], map: "SettingsID")
 }
 
 model planterbox {
-  boxID              String              @id @db.Char(12)
-  ownerID            String              @db.Char(9)
-  settingsID         String?             @db.Char(9)
-  user               user                @relation(fields: [ownerID], references: [UserID], onDelete: NoAction, onUpdate: NoAction, map: "planterbox_ibfk_1")
-  planterboxsettings planterboxsettings? @relation(fields: [settingsID], references: [SettingsID], onDelete: NoAction, onUpdate: NoAction, map: "planterbox_ibfk_2")
+  boxID              Int                 @id @default(autoincrement())
+  ownerID            Int
+  SettingsID         Int?
+  planterboxsettings planterboxsettings? @relation(fields: [SettingsID], references: [SettingsID], onUpdate: NoAction, map: "planterbox_ibfk_2")
+  user               user                @relation(fields: [ownerID], references: [UserID], onDelete: Cascade, onUpdate: NoAction, map: "planterbox_ibfk_1")
+  sensordata         sensordata[]
 
+  @@index([SettingsID], map: "SettingsID")
   @@index([ownerID], map: "ownerID")
-  @@index([settingsID], map: "settingsID")
 }
 
 model planterboxsettings {
-  SettingsID         String                          @id @db.Char(9)
+  SettingsID         Int                             @id @default(autoincrement())
   SettingName        String?                         @db.VarChar(127)
   wateringMode       planterboxsettings_wateringMode
   minMoisture        Float                           @db.Float
@@ -77,12 +78,12 @@ model planterboxsettings {
 }
 
 model post {
-  PostID   String     @id @db.Char(12)
+  PostID   Int        @id @default(autoincrement())
   contents String     @db.Text
   datetime DateTime   @db.DateTime(0)
   title    String     @db.VarChar(255)
   votes    Int
-  posterID String     @db.Char(9)
+  posterID Int
   user     user       @relation(fields: [posterID], references: [UserID], onDelete: NoAction, onUpdate: NoAction, map: "post_ibfk_1")
   comments comments[]
 
@@ -90,17 +91,19 @@ model post {
 }
 
 model sensordata {
-  BoxID          String   @db.Char(12)
-  DateTime       DateTime @db.DateTime(0)
-  Moisture       Float    @db.Float
-  Temperature    Float    @db.Float
-  LightIntensity Float    @db.Float
+  BoxID          Int
+  DateTime       DateTime   @db.DateTime(0)
+  Moisture       Float      @db.Float
+  Temperature    Float      @db.Float
+  LightIntensity Float      @db.Float
+  planterbox     planterbox @relation(fields: [BoxID], references: [boxID], onDelete: Cascade, onUpdate: NoAction, map: "sensordata_ibfk_1")
 
   @@id([BoxID, DateTime])
+  @@index([BoxID], map: "BoxID")
 }
 
 model user {
-  UserID       String         @id @db.Char(9)
+  UserID       Int            @id @default(autoincrement())
   Email        String         @db.VarChar(127)
   UserName     String         @db.VarChar(16)
   Password     String         @db.VarChar(16)
@@ -114,15 +117,15 @@ model user {
 
 model wateringschedule {
   time               DateTime           @db.Time(0)
-  settingsID         String             @db.Char(9)
-  planterboxsettings planterboxsettings @relation(fields: [settingsID], references: [SettingsID], onDelete: NoAction, onUpdate: NoAction, map: "wateringschedule_ibfk_1")
+  SettingsID         Int
+  planterboxsettings planterboxsettings @relation(fields: [SettingsID], references: [SettingsID], onDelete: Cascade, onUpdate: NoAction, map: "wateringschedule_ibfk_1")
 
-  @@id([time, settingsID])
-  @@index([settingsID], map: "settingsID")
+  @@id([time, SettingsID])
+  @@index([SettingsID], map: "SettingsID")
 }
 
 model wikientry {
-  entryID       String @id @db.Char(7)
+  entryID       Int    @id @default(autoincrement())
   plantname     String @db.VarChar(255)
   plantdesc     String @db.Text
   fertilizer    String @db.Text
@@ -132,12 +135,12 @@ model wikientry {
 }
 
 model fertilizerschedule {
-  Time               DateTime           @db.Time(0)
-  SettingsID         String             @db.Char(9)
+  time               DateTime           @db.Time(0)
+  SettingsID         Int
   Interval           Int
-  planterboxsettings planterboxsettings @relation(fields: [SettingsID], references: [SettingsID], onDelete: NoAction, onUpdate: NoAction, map: "fertilizerschedule_ibfk_1")
+  planterboxsettings planterboxsettings @relation(fields: [SettingsID], references: [SettingsID], onDelete: Cascade, onUpdate: NoAction, map: "fertilizerschedule_ibfk_1")
 
-  @@id([Time, SettingsID])
+  @@id([time, SettingsID])
   @@index([SettingsID], map: "SettingsID")
 }
 

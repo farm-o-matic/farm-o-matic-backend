@@ -15,11 +15,11 @@ app.get('/', (req:Request, res:Response) => {
 })
 
 // view list of plant profile (settings preset)
-app.get('/viewPresets', async (req, res) => {
+app.get('planterboxes/viewPresets', async (req, res) => {
     const presets = await prisma.planterboxsettings.findMany({
         where: { 
             SettingsID: {
-                startsWith: '701' //SettingsID of presets start are from 701,000,000 to 701,999,999
+                lt: 100000 //SettingsID of presets start are 100,000 and below
             }
         }
     })
@@ -27,14 +27,13 @@ app.get('/viewPresets', async (req, res) => {
 })
 
 // create new plant profile (settings preset)
-app.post('/createPreset', async (req, res) => {
-    const { SettingsID, SettingName, wateringMode, minMoisture, maxMoisture, 
+app.post('planterboxes/createPreset', async (req, res) => {
+    const { SettingName, wateringMode, minMoisture, maxMoisture, 
             minLightIntensity, maxLightIntensity, lightingMode, lightStartTime, 
             lightStopTime, lightPower, lightStatus} = req.body
 
     const result = await prisma.planterboxsettings.create({
         data: {
-            SettingsID: SettingsID,
             SettingName: SettingName,
             wateringMode: wateringMode,
             minMoisture: minMoisture,
@@ -52,14 +51,15 @@ app.post('/createPreset', async (req, res) => {
 })
 
 // update box settings
-app.put('/updateBoxSettings/', async (req, res) => {
-    const { SettingsID, SettingName, wateringMode, minMoisture, maxMoisture, 
+app.put('planterboxes/settings/:id/updateBoxSettings/', async (req, res) => {
+    const { id } = req.params
+    const { SettingName, wateringMode, minMoisture, maxMoisture, 
             minLightIntensity, maxLightIntensity, lightingMode, lightStartTime, 
             lightStopTime, lightPower, lightStatus} = req.body
 
     try {
         const settings = await prisma.planterboxsettings.update({
-        where: { SettingsID: SettingsID },
+        where: { SettingsID: Number(id) },
             data: {
                 SettingName: SettingName,
                 wateringMode: wateringMode,
@@ -77,9 +77,15 @@ app.put('/updateBoxSettings/', async (req, res) => {
 
     res.json(settings)
   } catch (error) {
-    res.json({ error: `Settings with ID ${SettingsID} does not exist in the database` })
+    res.json({ error: `Settings with ID ${ id } does not exist in the database` })
   }
 })
+
+// create new watering schedule
+app.post('/planterboxes/settings/:id/addWateringSchedule', async (req, res) => {
+    
+})
+
 
 app.listen(port, () => {
 console.log(`The application is listening on port ${port}!`)

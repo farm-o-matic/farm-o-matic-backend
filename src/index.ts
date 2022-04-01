@@ -87,15 +87,35 @@ app.post('/planterboxes/settings/:id/addWateringSchedule', async (req, res) => {
     const { time } = req.body
     const schedule = await prisma.wateringschedule.create({
         data: {
-            SettingsID: Number(id),
-            time: time
+            time: time,
+            SettingsID: Number(id)
         }
     })
     res.json(schedule)
 })
 
 // update watering schedule
+app.put('/planterboxes/settings/:id/updateWateringSchedule', async (req, res) => {
+    const { id } = req.params
+    const { oldTime, newTime } = req.body
 
+    try{
+        const schedule = await prisma.wateringschedule.update({
+            where:{
+                time_SettingsID: {
+                    time: oldTime,
+                    SettingsID: Number(id)
+                }
+            },
+            data: {
+                time: newTime
+            }
+        })
+        res.json(schedule)
+    } catch (error) {
+
+    }
+})
 
 app.listen(port, () => {
 console.log(`The application is listening on port ${port}!`)

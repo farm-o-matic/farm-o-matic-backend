@@ -155,6 +155,44 @@ app.put('/planterboxes/settings/:id/updatePesticideSchedule', async (req, res) =
     }
 })
 
+// create new fertilizer schedule
+app.post('/planterboxes/settings/:id/addFertilizerSchedule', async (req, res) => {
+    const { id } = req.params
+    const { time, Interval } = req.body
+    const schedule = await prisma.fertilizerschedule.create({
+        data: {
+            time: time,
+            SettingsID: Number(id),
+            Interval: Interval
+        }
+    })
+    res.json(schedule)
+})
+
+// update fertilizer schedule
+app.put('/planterboxes/settings/:id/updateFertilizerSchedule', async (req, res) => {
+    const { id } = req.params
+    const { oldTime, newTime, Interval } = req.body
+
+    try{
+        const schedule = await prisma.fertilizerschedule.update({
+            where:{
+                time_SettingsID: {
+                    time: oldTime,
+                    SettingsID: Number(id)
+                }
+            },
+            data: {
+                time: newTime,
+                Interval: Interval
+            }
+        })
+        res.json(schedule)
+    } catch (error) {
+
+    }
+})
+
 app.listen(port, () => {
 console.log(`The application is listening on port ${port}!`)
 })

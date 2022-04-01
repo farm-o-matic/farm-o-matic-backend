@@ -4,9 +4,13 @@ Content-Type: application/json
 {"UserName" : "Jeff"}
 
 ###
+GET http://localhost:3000/user/1/planterboxes
 
-GET http://localhost:3000/api/users/1/platerboxes
+###
+GET http://localhost:3000/planterbox/1/setting
+
+###
+GET http://localhost:3000/pbsetting/1/schedules
 
 ###
 
-GET http://localhost:3000/api/planterboxes/1/setting

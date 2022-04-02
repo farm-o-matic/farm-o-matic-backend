@@ -89,12 +89,12 @@ model planterboxsettings {
 }
 
 model post {
+  title    String     @db.VarChar(255)
   PostID   Int        @id @default(autoincrement())
   contents String     @db.Text
   datetime DateTime   @db.DateTime(0)
-  title    String     @db.VarChar(255)
-  votes    Int
   posterID Int
+  votes    Int
   user     user       @relation(fields: [posterID], references: [UserID], onDelete: NoAction, onUpdate: NoAction, map: "post_ibfk_1")
   comments comments[]
 
@@ -114,12 +114,13 @@ model sensordata {
 }
 
 model user {
-  UserID       Int            @id @default(autoincrement())
   Email        String         @db.VarChar(127)
   UserName     String         @db.VarChar(16)
   Password     String         @db.VarChar(256)
   Picture      Bytes?         @db.Blob
   TotalUpvotes Int
+  UserID       Int            @id @default(autoincrement())
+  UserName     String         @db.VarChar(16)
   commentreply commentreply[]
   comments     comments[]
   planterbox   planterbox[]

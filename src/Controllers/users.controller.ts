@@ -1,14 +1,15 @@
 import { Request, Response } from 'express'
-const { PrismaClient } = require('@prisma/client')
-const prisma = new PrismaClient()
-
+import { PrismaClient } from '@prisma/client'
+const prisma:PrismaClient = new PrismaClient()
+import * as bcrypt from "bcrypt"
+const salt = 10;
 
 export const register = async (req:Request,res:Response) => {
     const email = req.body.email;
 	const username = req.body.username;
 	const password = req.body.password;
 	const password2 = req.body.password2;
-	const validateEmail = (email: any) => {
+	const validateEmail = (email: string) => {
 		return email.match(
 		  /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 		);
@@ -50,11 +51,13 @@ export const register = async (req:Request,res:Response) => {
 	} else if (valpassword !== null) {
 		res.send('This password is already used!');
 	} else {
+		const password = await bcrypt.hash(req.body.password, salt)
+		console.log(password)
 		const newUser = await prisma.user.create({
 			data : {
 				Email: req.body.email,
 				UserName: req.body.username,
-				Password: req.body.password,
+				Password: password,
 				Picture: null,
 				TotalUpvotes: 0
 			},
@@ -71,10 +74,9 @@ export const login = async (req:Request,res:Response) => {
 		const uservalidation = await prisma.user.findFirst({
             where: {
                 Email: email,
-				Password: password,
             }
         });
-		if (uservalidation !== null){
+		if (uservalidation !== null && await bcrypt.compare(password,uservalidation.Password)){
 			res.send('Logged in!');
 		} else {
 			res.send('Incorrect Username or Password!');
@@ -118,3 +120,24 @@ export const addbox = async (req:Request,res:Response) => {
 	}
 }
 
+export const patchid = async (req: Request, res: Response) => {
+    const { id } = req.params
+    const user = await prisma.user.update({
+        where: {
+            UserID: Number(id),
+        },
+        data: req.body
+    })
+    res.json(user)
+}
+
+//get all user planterboxes data
+export const getuserboxes = async(req: Request, res: Response) =>{
+    const { id } = req.params
+    const planterboxes = await prisma.planterbox.findMany({
+        where: {
+            ownerID: Number(id),
+        }
+    })
+    res.json(planterboxes)
+}

@@ -1,6 +1,9 @@
 import {Response, Request, Application} from 'express'
 import * as express from 'express'
 import { PrismaClient } from '@prisma/client'
+import userRouter from './Routes/user.routes'
+import planterboxRouter from './Routes/planterbox.routes'
+import pbsettingRouter from './Routes/pbsetting.routes'
 
 const prisma = new PrismaClient()
 
@@ -15,7 +18,7 @@ app.get('/', (req:Request, res:Response) => {
 })
 //To apply router for enhancing folder structure, the app.use() must be applied.
 //@TO-DO: FIX schema in prisma folder to fit with original schema. 
-
+// app.use('/user',userRouter)
 
 // view list of plant profile (settings preset)
 app.get('planterboxes/viewPresets', async (req, res) => {
@@ -197,6 +200,12 @@ app.put('/planterboxes/settings/:id/updateFertilizerSchedule', async (req, res) 
         res.json({ error: `Settings with ID ${ id } does not exist in the database` })
     }
 })
+
+app.use('/user',userRouter)
+
+app.use('/planterbox',planterboxRouter)
+
+app.use('/pbsetting', pbsettingRouter)
 
 app.listen(port, () => {
     console.log(`The application is listening on port ${port}!`)

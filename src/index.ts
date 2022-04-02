@@ -151,7 +151,7 @@ app.put('/planterboxes/settings/:id/updatePesticideSchedule', async (req, res) =
         })
         res.json(schedule)
     } catch (error) {
-
+        console.err(error)
     }
 })
 

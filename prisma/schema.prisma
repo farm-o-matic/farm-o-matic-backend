@@ -71,6 +71,7 @@ model planterbox {
 model planterboxsettings {
   SettingsID         Int                             @id @default(autoincrement())
   SettingName        String?                         @db.VarChar(127)
+  plantPicture       Bytes?                          @db.Blob
   wateringMode       planterboxsettings_wateringMode
   minMoisture        Float                           @db.Float
   maxMoisture        Float                           @db.Float
@@ -114,7 +115,8 @@ model sensordata {
 
 model user {
   Email        String         @db.VarChar(127)
-  Password     String         @db.VarChar(16)
+  UserName     String         @db.VarChar(16)
+  Password     String         @db.VarChar(256)
   Picture      Bytes?         @db.Blob
   TotalUpvotes Int
   UserID       Int            @id @default(autoincrement())

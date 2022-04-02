@@ -85,12 +85,12 @@ export const login = async (req: Request, res: Response) => {
 	const email = req.body.email;
 	const password = req.body.password;
 	if (email && password) {
-		const uservalidation = await prisma.user.findFirst({
+		const userValidation = await prisma.user.findFirst({
 			where: {
 				Email: email,
 			}
 		});
-		if (uservalidation !== null && await bcrypt.compare(password, uservalidation.Password)) {
+		if (userValidation !== null && await bcrypt.compare(password, userValidation.Password)) {
 			res.send('Logged in!');
 		} else {
 			res.send('Incorrect Username or Password!');

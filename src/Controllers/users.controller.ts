@@ -3,7 +3,7 @@ import { prisma } from '../helper/prisma.client'
 import { returnData } from '../Models/returnJSON';
 import { userModel } from '../Models/user.model'
 import * as bcrypt from "bcrypt"
-import {registerValidation} from '../helper/validator.register'
+import { registerValidation } from '../helper/validator.register'
 const salt = 10;
 export const register = async (req: Request, res: Response) => {
 	const result: returnData = {
@@ -60,8 +60,9 @@ export const register = async (req: Request, res: Response) => {
 	// } else if (valpassword !== null) {
 	// 	result.discription = 'This password is already used!'
 	// } else {
+	// }
 	const userValidation = await registerValidation(user)
-	if (!Object.values(userValidation).every(Boolean)){
+	if (!Object.values(userValidation).every(Boolean)) {
 		const newUser = await prisma.user.create({
 			data: {
 				Email: user.email,
@@ -73,9 +74,8 @@ export const register = async (req: Request, res: Response) => {
 		});
 		result.error = false
 		result.discription = newUser
-	// }
-	res.json(result)
-	} else{
+		res.json(result)
+	} else {
 		result.error = true
 		result.discription = userValidation
 	}

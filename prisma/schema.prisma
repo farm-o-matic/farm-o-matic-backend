@@ -36,8 +36,6 @@ model comments {
   @@index([postID], map: "postID")
 }
 
-<<<<<<< HEAD
-=======
 model fertilizerschedule {
   time               DateTime           @db.Time(0)
   SettingsID         Int
@@ -48,7 +46,6 @@ model fertilizerschedule {
   @@index([SettingsID], map: "SettingsID")
 }
 
->>>>>>> main
 model pesticideschedule {
   time               DateTime           @db.Time(0)
   SettingsID         Int
@@ -147,19 +144,6 @@ model wikientry {
   LightExposure String @db.Text
 }
 
-<<<<<<< HEAD
-model fertilizerschedule {
-  time               DateTime           @db.Time(0)
-  SettingsID         Int
-  Interval           Int
-  planterboxsettings planterboxsettings @relation(fields: [SettingsID], references: [SettingsID], onDelete: Cascade, onUpdate: NoAction, map: "fertilizerschedule_ibfk_1")
-
-  @@id([time, SettingsID])
-  @@index([SettingsID], map: "SettingsID")
-}
-
-=======
->>>>>>> main
 enum planterboxsettings_wateringMode {
   Manual
   Schedule

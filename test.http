@@ -7,7 +7,7 @@ Content-Type: application/json
 GET http://localhost:3000/user/1/planterboxes
 
 ###
-GET http://localhost:3000/planterbox/1/setting
+GET http://localhost:3000/planterbox/1/settings
 
 ###
 GET http://localhost:3000/pbsetting/1/schedules

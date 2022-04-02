@@ -119,7 +119,7 @@ model user {
   UserID       Int            @id @default(autoincrement())
   Email        String         @db.VarChar(127)
   UserName     String         @db.VarChar(16)
-  Password     String         @db.VarChar(16)
+  Password     String         @db.VarChar(256)
   Picture      Bytes?         @db.Blob
   TotalUpvotes Int
   commentreply commentreply[]

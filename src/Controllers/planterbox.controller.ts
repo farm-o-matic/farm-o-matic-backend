@@ -12,5 +12,5 @@ export const getboxsettings = async(req: Request, res: Response) =>{
             planterboxsettings: true,
         },
     })
-    return res.json(settings)
+    return res.json(settings['planterboxsettings'])
 }

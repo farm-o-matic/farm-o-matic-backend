@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import {Response, Request, Application} from 'express'
 import * as express from 'express'
 import { PrismaClient } from '@prisma/client'
@@ -6,13 +7,27 @@ const prisma = new PrismaClient()
 
 const app:Application = express()
 const port:Number = 3000
+=======
+import { Application } from 'express'
+import * as express from 'express'
+import userRouter from './Routes/user.routes'
+
+const app: Application = express()
+const port: String = process.env.PORT || '3000'
+>>>>>>> main
 
 app.use(express.urlencoded({extended: true}))
 app.use(express.json())
 
+<<<<<<< HEAD
 app.get('/', (req:Request, res:Response) => {
     res.send('Well done!')
 })
+=======
+//To apply router for enhancing folder structure, the app.use() must be applied.
+//@TO-DO: FIX schema in prisma folder to fit with original schema. 
+app.use('/user',userRouter)
+>>>>>>> main
 
 // view list of plant profile (settings preset)
 app.get('planterboxes/viewPresets', async (req, res) => {
@@ -194,5 +209,5 @@ app.put('/planterboxes/settings/:id/updateFertilizerSchedule', async (req, res) 
 })
 
 app.listen(port, () => {
-console.log(`The application is listening on port ${port}!`)
+    console.log(`The application is listening on port ${port}!`)
 })

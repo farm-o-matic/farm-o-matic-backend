@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import { PrismaClient } from '@prisma/client'
 const prisma:PrismaClient = new PrismaClient()
 import * as bcrypt from "bcrypt"
-
+const salt = 10;
 export const register = async (req:Request,res:Response) => {
     const email = req.body.email;
 	const username = req.body.username;
@@ -50,12 +50,13 @@ export const register = async (req:Request,res:Response) => {
 	} else if (valpassword !== null) {
 		res.send('This password is already used!');
 	} else {
-		const password:any = await bcrypt.hash(req.body.password, 20)
+		const password = await bcrypt.hash(req.body.password, salt)
+		console.log(password)
 		const newUser = await prisma.user.create({
 			data : {
 				Email: req.body.email,
 				UserName: req.body.username,
-				Password:password,
+				Password: password,
 				Picture: null,
 				TotalUpvotes: 0
 			},
@@ -74,7 +75,7 @@ export const login = async (req:Request,res:Response) => {
                 Email: email,
             }
         });
-		if (uservalidation !== null && await bcrypt.compare(password,uservalidation.Password)){
+		if (uservalidation !== null && await bcrypt.compare(password,uservalidation.password)){
 			res.send('Logged in!');
 		} else {
 			res.send('Incorrect Username or Password!');

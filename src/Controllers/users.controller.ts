@@ -50,13 +50,12 @@ export const register = async (req:Request,res:Response) => {
 	} else if (valpassword !== null) {
 		res.send('This password is already used!');
 	} else {
-		const salt = bcrypt.genSaltSync(42)
-		
+		const password:any = await bcrypt.hash(req.body.password, 20)
 		const newUser = await prisma.user.create({
 			data : {
 				Email: req.body.email,
 				UserName: req.body.username,
-				Password: await bcrypt.hashSync(req.body.password, salt),
+				Password:password,
 				Picture: null,
 				TotalUpvotes: 0
 			},
@@ -75,7 +74,7 @@ export const login = async (req:Request,res:Response) => {
                 Email: email,
             }
         });
-		if (uservalidation !== null && await bcrypt.compare(password,uservalidation.password)){
+		if (uservalidation !== null && await bcrypt.compare(password,uservalidation.Password)){
 			res.send('Logged in!');
 		} else {
 			res.send('Incorrect Username or Password!');

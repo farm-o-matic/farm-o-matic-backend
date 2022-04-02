@@ -15,7 +15,7 @@ app.get('/', (req:Request, res:Response) => {
 })
 //To apply router for enhancing folder structure, the app.use() must be applied.
 //@TO-DO: FIX schema in prisma folder to fit with original schema. 
-app.use('/user',userRouter)
+
 
 // view list of plant profile (settings preset)
 app.get('planterboxes/viewPresets', async (req, res) => {

@@ -31,13 +31,14 @@ app.get('planterboxes/viewPresets', async (req, res) => {
 
 // create new plant profile (settings preset)
 app.post('planterboxes/createPreset', async (req, res) => {
-    const { SettingName, wateringMode, minMoisture, maxMoisture, 
+    const { SettingName, plantPicture, wateringMode, minMoisture, maxMoisture, 
             minLightIntensity, maxLightIntensity, lightingMode, lightStartTime, 
             lightStopTime, lightPower, lightStatus} = req.body
 
     const result = await prisma.planterboxsettings.create({
         data: {
             SettingName: SettingName,
+            plantPicture: plantPicture,
             wateringMode: wateringMode,
             minMoisture: minMoisture,
             maxMoisture: maxMoisture,
@@ -56,7 +57,7 @@ app.post('planterboxes/createPreset', async (req, res) => {
 // update box settings
 app.put('planterboxes/settings/:id/updateBoxSettings/', async (req, res) => {
     const { id } = req.params
-    const { SettingName, wateringMode, minMoisture, maxMoisture, 
+    const { SettingName, plantPicture, wateringMode, minMoisture, maxMoisture, 
             minLightIntensity, maxLightIntensity, lightingMode, lightStartTime, 
             lightStopTime, lightPower, lightStatus} = req.body
 
@@ -65,6 +66,7 @@ app.put('planterboxes/settings/:id/updateBoxSettings/', async (req, res) => {
         where: { SettingsID: Number(id) },
             data: {
                 SettingName: SettingName,
+                plantPicture: plantPicture,
                 wateringMode: wateringMode,
                 minMoisture: minMoisture,
                 maxMoisture: maxMoisture,

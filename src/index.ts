@@ -113,7 +113,7 @@ app.put('/planterboxes/settings/:id/updateWateringSchedule', async (req, res) =>
         })
         res.json(schedule)
     } catch (error) {
-
+        res.json({ error: `Settings with ID ${ id } does not exist in the database` })
     }
 })
 
@@ -151,7 +151,7 @@ app.put('/planterboxes/settings/:id/updatePesticideSchedule', async (req, res) =
         })
         res.json(schedule)
     } catch (error) {
-
+        res.json({ error: `Settings with ID ${ id } does not exist in the database` })
     }
 })
 
@@ -189,7 +189,7 @@ app.put('/planterboxes/settings/:id/updateFertilizerSchedule', async (req, res) 
         })
         res.json(schedule)
     } catch (error) {
-
+        res.json({ error: `Settings with ID ${ id } does not exist in the database` })
     }
 })
 

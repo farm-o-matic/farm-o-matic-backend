@@ -13,6 +13,9 @@ app.use(express.json())
 app.get('/', (req:Request, res:Response) => {
     res.send('Well done!')
 })
+//To apply router for enhancing folder structure, the app.use() must be applied.
+//@TO-DO: FIX schema in prisma folder to fit with original schema. 
+app.use('/user',userRouter)
 
 // view list of plant profile (settings preset)
 app.get('planterboxes/viewPresets', async (req, res) => {
@@ -194,5 +197,5 @@ app.put('/planterboxes/settings/:id/updateFertilizerSchedule', async (req, res) 
 })
 
 app.listen(port, () => {
-console.log(`The application is listening on port ${port}!`)
+    console.log(`The application is listening on port ${port}!`)
 })

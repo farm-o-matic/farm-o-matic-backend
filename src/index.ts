@@ -116,7 +116,7 @@ app.put('/planterboxes/settings/:id/updateWateringSchedule', async (req, res) =>
         })
         res.json(schedule)
     } catch (error) {
-
+        console.err(error)
     }
 })
 
@@ -192,7 +192,7 @@ app.put('/planterboxes/settings/:id/updateFertilizerSchedule', async (req, res) 
         })
         res.json(schedule)
     } catch (error) {
-
+        console.err(error)
     }
 })
 

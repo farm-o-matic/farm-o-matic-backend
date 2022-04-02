@@ -75,7 +75,7 @@ export const login = async (req:Request,res:Response) => {
                 Email: email,
             }
         });
-		if (uservalidation !== null && await bcrypt.compare(password,uservalidation.password)){
+		if (uservalidation !== null && await bcrypt.compare(password,uservalidation.Password)){
 			res.send('Logged in!');
 		} else {
 			res.send('Incorrect Username or Password!');

@@ -36,6 +36,16 @@ model comments {
   @@index([postID], map: "postID")
 }
 
+model fertilizerschedule {
+  time               DateTime           @db.Time(0)
+  SettingsID         Int
+  Interval           Int
+  planterboxsettings planterboxsettings @relation(fields: [SettingsID], references: [SettingsID], onDelete: Cascade, onUpdate: NoAction, map: "fertilizerschedule_ibfk_1")
+
+  @@id([time, SettingsID])
+  @@index([SettingsID], map: "SettingsID")
+}
+
 model pesticideschedule {
   time               DateTime           @db.Time(0)
   SettingsID         Int
@@ -78,12 +88,12 @@ model planterboxsettings {
 }
 
 model post {
+  title    String     @db.VarChar(255)
   PostID   Int        @id @default(autoincrement())
   contents String     @db.Text
   datetime DateTime   @db.DateTime(0)
-  title    String     @db.VarChar(255)
-  votes    Int
   posterID Int
+  votes    Int
   user     user       @relation(fields: [posterID], references: [UserID], onDelete: NoAction, onUpdate: NoAction, map: "post_ibfk_1")
   comments comments[]
 
@@ -103,12 +113,12 @@ model sensordata {
 }
 
 model user {
-  UserID       Int            @id @default(autoincrement())
   Email        String         @db.VarChar(127)
-  UserName     String         @db.VarChar(16)
-  Password     String         @db.VarChar(256)
+  Password     String         @db.VarChar(16)
   Picture      Bytes?         @db.Blob
   TotalUpvotes Int
+  UserID       Int            @id @default(autoincrement())
+  UserName     String         @db.VarChar(16)
   commentreply commentreply[]
   comments     comments[]
   planterbox   planterbox[]
@@ -132,16 +142,6 @@ model wikientry {
   pesticide     String @db.Text
   amountofwater String @db.Text
   LightExposure String @db.Text
-}
-
-model fertilizerschedule {
-  time               DateTime           @db.Time(0)
-  SettingsID         Int
-  Interval           Int
-  planterboxsettings planterboxsettings @relation(fields: [SettingsID], references: [SettingsID], onDelete: Cascade, onUpdate: NoAction, map: "fertilizerschedule_ibfk_1")
-
-  @@id([time, SettingsID])
-  @@index([SettingsID], map: "SettingsID")
 }
 
 enum planterboxsettings_wateringMode {

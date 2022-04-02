@@ -3,6 +3,7 @@ import { PrismaClient } from '@prisma/client'
 const prisma:PrismaClient = new PrismaClient()
 import * as bcrypt from "bcrypt"
 const salt = 10;
+
 export const register = async (req:Request,res:Response) => {
     const email = req.body.email;
 	const username = req.body.username;
@@ -119,3 +120,24 @@ export const addbox = async (req:Request,res:Response) => {
 	}
 }
 
+export const patchid = async (req: Request, res: Response) => {
+    const { id } = req.params
+    const user = await prisma.user.update({
+        where: {
+            UserID: Number(id),
+        },
+        data: req.body
+    })
+    res.json(user)
+}
+
+//get all user planterboxes data
+export const getuserboxes = async(req: Request, res: Response) =>{
+    const { id } = req.params
+    const planterboxes = await prisma.planterbox.findMany({
+        where: {
+            ownerID: Number(id),
+        }
+    })
+    res.json(planterboxes)
+}

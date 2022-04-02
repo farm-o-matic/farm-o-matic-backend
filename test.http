@@ -1,0 +1,16 @@
+PATCH http://localhost:3000/user/1
+Content-Type: application/json
+
+{"UserName" : "Jeff"}
+
+###
+GET http://localhost:3000/user/1/planterboxes
+
+###
+GET http://localhost:3000/planterbox/1/settings
+
+###
+GET http://localhost:3000/pbsetting/1/schedules
+
+###
+

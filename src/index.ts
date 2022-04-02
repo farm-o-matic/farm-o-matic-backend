@@ -1,6 +1,9 @@
 import {Response, Request, Application} from 'express'
 import * as express from 'express'
 import { PrismaClient } from '@prisma/client'
+import userRouter from './Routes/user.routes'
+import planterboxRouter from './Routes/planterbox.routes'
+import pbsettingRouter from './Routes/pbsetting.routes'
 
 const prisma = new PrismaClient()
 
@@ -195,6 +198,12 @@ app.put('/planterboxes/settings/:id/updateFertilizerSchedule', async (req, res) 
 
     }
 })
+
+app.use('/user',userRouter)
+
+app.use('/planterbox',planterboxRouter)
+
+app.use('/pbsetting', pbsettingRouter)
 
 app.listen(port, () => {
     console.log(`The application is listening on port ${port}!`)

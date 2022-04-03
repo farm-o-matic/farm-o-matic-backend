@@ -69,7 +69,7 @@ export const login = async (req: Request, res: Response) => {
 
 export const getuser = async (req: Request, res: Response) => {
 	const { id } = req.params;
-	var x: number = +id;
+	const x: number = +id;
 	const user = await prisma.user.findFirst({
 		where: {
 			UserID: x,
@@ -81,7 +81,7 @@ export const getuser = async (req: Request, res: Response) => {
 export const addbox = async (req: Request, res: Response) => {
 	const { id } = req.params;
 	const boxid = req.body.boxid;
-	var y: number = +id;
+	const y: number = +id;
 	const pbox = await prisma.planterbox.findFirst({
 		where: {
 			boxID: boxid,

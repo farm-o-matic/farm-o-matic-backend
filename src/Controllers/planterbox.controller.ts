@@ -18,7 +18,7 @@ export const getboxsettings = async (req: Request, res: Response) => {
     }else{
         return res.json({
             error: true,
-            discription: "getBoxSetting Error"
+            description: "getBoxSetting Error"
         })
     }
 }

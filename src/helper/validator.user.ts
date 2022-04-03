@@ -32,6 +32,16 @@ export const registerValidation = async (user: userModel) => {
     }
     if (await !emailValidator(user.email)) result.emailValid = true
     if (await existedEmail(user.email)) result.existedEmail = true
-    if (await existedUsername(user.username)) result.existedUsername = true
+    if (await existedUsername(user.username!)) result.existedUsername = true
+    return result
+}
+
+export const loginValidation =async (user: userModel) => {
+    let result: validator = {
+        emailValid: false,
+        existedEmail: false,
+        existedUsername: false
+    }
+    if (await existedEmail(user.email)) result.existedEmail = true
     return result
 }

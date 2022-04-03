@@ -85,7 +85,7 @@ export const updateBoxSettings = async (req: Request, res: Response) => {
 
         res.json(settings)
     } catch (error) {
-        res.json({ error: `Settings with ID ${id} does not exist in the database` })
+        res.json({ error: `Settings with  does not exist in the database`, id: id })
     }
 }
 
@@ -119,7 +119,7 @@ export const updateWateringSchedule = async (req:Request, res:Response) => {
         })
         res.json(schedule)
     } catch (error) {
-        res.json({ error: `Settings with ID ${ id } does not exist in the database` })
+        res.json({ error: `Settings with ID does not exist in the database`, id: id })
     }
 }
 
@@ -142,7 +142,7 @@ export const updateFertilizerSchedule =  async (req:Request, res:Response) => {
         })
         res.json(schedule)
     } catch (error) {
-        res.json({ error: `Settings with ID ${ id } does not exist in the database` })
+        res.json({ error: `Settings with ID does not exist in the database`, id: id })
     }
 }
 
@@ -178,7 +178,7 @@ export const updatePesticideSchedule = async (req:Request, res:Response) => {
         })
         res.json(schedule)
     } catch (error) {
-        res.json({ error: `Settings with ID ${ id } does not exist in the database` })
+        res.json({ error: `Settings with ID does not exist in the database`, id: id })
     }
 }
 

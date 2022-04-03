@@ -5,7 +5,9 @@ import { userModel } from '../Models/user.model'
 import * as bcrypt from "bcrypt"
 import { registerValidation } from '../helper/validator.user'
 import { loginModel } from '../Models/login.model'
+
 const salt = 10;
+
 export const register = async (req: Request, res: Response) => {
 	let result: returnModel = {
 		error: true,
@@ -48,7 +50,7 @@ export const login = async (req: Request, res: Response) => {
 		error: true,
 		description: loginValidator
 	}
-	
+
 	if (user.email && user.password) {
 		const userValidation = await prisma.user.findFirst({
 			where: {

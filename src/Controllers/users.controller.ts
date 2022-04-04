@@ -60,7 +60,9 @@ export const login = async (req: Request, res: Response) => {
 		if (userValidation !== null && await bcrypt.compare(user.password, userValidation.Password)) {
 			result.error = false
 			loginValidator.correctPassword = true
-		} 
+		} else {
+			loginValidator.existedUser = true
+		}
 	} else {
 		result.error = true
 	}

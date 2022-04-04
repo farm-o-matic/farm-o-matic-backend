@@ -85,8 +85,9 @@ export const updateBoxSettings = async (req: Request, res: Response) => {
 
         res.json(settings)
     } catch (error) {
-        res.json({ error: `Settings with  does not exist in the database`, id: id })
+        res.json({ error: `Settings with ID does not exist in the database`, id: id })
     }
+
 }
 
 export const addWateringSchedule = async (req:Request, res:Response) => {

@@ -20,11 +20,11 @@ router.get('/viewPresets', viewPresets)
 
 router.post('/createPreset', createPreset)
 
-router.put('/settings/:id/updateBoxSettings/', updateBoxSettings)
+router.put('/settings/:id/updateBoxSettings', updateBoxSettings)
 
 router.post('/settings/:id/addWateringSchedule', addWateringSchedule)
 
-router.put('settings/:sid/updateWateringSchedule', updateWateringSchedule)
+router.put('/settings/:sid/updateWateringSchedule', updateWateringSchedule)
 
 router.post('/settings/:id/addPesticideSchedule',addPesticideSchedule)
 

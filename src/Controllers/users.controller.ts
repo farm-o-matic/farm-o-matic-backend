@@ -78,13 +78,14 @@ export const getuser = async (req: Request, res: Response) => {
 	res.json(user);
 }
 
+//changed from boxID to serialNumber because boxID auto increments by the DB, and serial# ties to the physical box
 export const addbox = async (req: Request, res: Response) => {
 	const { id } = req.params;
-	const boxid = req.body.boxid;
+	const serialNumber = req.body.serialNumber;
 	const y: number = +id;
 	const pbox = await prisma.planterbox.findFirst({
 		where: {
-			boxID: boxid,
+			serialNumber: serialNumber,
 		}
 	});
 	if (pbox !== null) {
@@ -92,7 +93,7 @@ export const addbox = async (req: Request, res: Response) => {
 	} else {
 		const registerbox = await prisma.planterbox.create({
 			data: {
-				boxID: boxid,
+				serialNumber: serialNumber,
 				ownerID: y,
 				SettingsID: null
 			},

@@ -24,14 +24,14 @@ router.put('/settings/:id/updateBoxSettings/', updateBoxSettings)
 
 router.post('/settings/:id/addWateringSchedule', addWateringSchedule)
 
-router.put('settings/:id/updateWateringSchedule', updateWateringSchedule)
+router.put('settings/:sid/updateWateringSchedule', updateWateringSchedule)
 
 router.post('/settings/:id/addPesticideSchedule',addPesticideSchedule)
 
-router.put('/settings/:id/updatePesticideSchedule',updatePesticideSchedule)
+router.put('/settings/:sid/updatePesticideSchedule',updatePesticideSchedule)
 
 router.post('/settings/:id/addFertilizerSchedule',addFertilizerSchedule)
 
-router.put('/settings/:id/updateFertilizerSchedule', updateFertilizerSchedule)
+router.put('/settings/:sid/updateFertilizerSchedule', updateFertilizerSchedule)
 
 export default router

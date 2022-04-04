@@ -92,58 +92,63 @@ export const updateBoxSettings = async (req: Request, res: Response) => {
 
 export const addWateringSchedule = async (req:Request, res:Response) => {
     const { id } = req.params
-    const { time } = req.body
+    const { time, duration } = req.body
     const schedule = await prisma.wateringschedule.create({
         data: {
+            SettingsID: Number(id),
             time: time,
-            SettingsID: Number(id)
+            duration: duration
         }
     })
     res.json(schedule)
 }
 
 export const updateWateringSchedule = async (req:Request, res:Response) => {
-    const { id } = req.params
-    const { oldTime, newTime } = req.body
+    const { sid } = req.params
+    const { time, duration } = req.body
 
     try{
         const schedule = await prisma.wateringschedule.update({
-            where:{
-                time_SettingsID: {
-                    time: oldTime,
-                    SettingsID: Number(id)
-                }
-            },
+            where:{ WSID: Number(sid) },
             data: {
-                time: newTime
+                time: time,
+                duration: duration
             }
         })
         res.json(schedule)
     } catch (error) {
-        res.json({ error: `Settings with ID does not exist in the database`, id: id })
+        res.json({ error: `Schedule with ID does not exist in the database`, sid: sid })
     }
 }
 
-export const updateFertilizerSchedule =  async (req:Request, res:Response) => {
+export const addFertilizerSchedule = async (req:Request, res:Response) => {
     const { id } = req.params
-    const { oldTime, newTime, Interval } = req.body
+    const { time, Interval } = req.body
+    const schedule = await prisma.fertilizerschedule.create({
+        data: {
+            time: time,
+            SettingsID: Number(id),
+            Interval: Interval
+        }
+    })
+    res.json(schedule)
+}
+
+export const updateFertilizerSchedule =  async (req:Request, res:Response) => {
+    const { sid } = req.params
+    const { time, Interval } = req.body
 
     try{
         const schedule = await prisma.fertilizerschedule.update({
-            where:{
-                time_SettingsID: {
-                    time: oldTime,
-                    SettingsID: Number(id)
-                }
-            },
+            where:{ FSID: Number(sid)},
             data: {
-                time: newTime,
+                time: time,
                 Interval: Interval
             }
         })
         res.json(schedule)
     } catch (error) {
-        res.json({ error: `Settings with ID does not exist in the database`, id: id })
+        res.json({ error: `Schedule with ID does not exist in the database`, sid: sid })
     }
 }
 
@@ -161,37 +166,19 @@ export const addPesticideSchedule = async (req:Request, res:Response) => {
 }
 
 export const updatePesticideSchedule = async (req:Request, res:Response) => {
-    const { id } = req.params
-    const { oldTime, newTime, Interval } = req.body
+    const { sid } = req.params
+    const { time, Interval } = req.body
 
     try{
         const schedule = await prisma.pesticideschedule.update({
-            where:{
-                time_SettingsID: {
-                    time: oldTime,
-                    SettingsID: Number(id)
-                }
-            },
+            where:{ PSID: Number(sid)},
             data: {
-                time: newTime,
+                time: time,
                 Interval: Interval
             }
         })
         res.json(schedule)
     } catch (error) {
-        res.json({ error: `Settings with ID does not exist in the database`, id: id })
+        res.json({ error: `Schedule with ID does not exist in the database`, sid: sid })
     }
-}
-
-export const addFertilizerSchedule = async (req:Request, res:Response) => {
-    const { id } = req.params
-    const { time, Interval } = req.body
-    const schedule = await prisma.fertilizerschedule.create({
-        data: {
-            time: time,
-            SettingsID: Number(id),
-            Interval: Interval
-        }
-    })
-    res.json(schedule)
 }

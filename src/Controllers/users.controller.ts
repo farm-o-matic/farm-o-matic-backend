@@ -69,10 +69,10 @@ export const login = async (req: Request, res: Response) => {
 
 export const getuser = async (req: Request, res: Response) => {
 	const { id } = req.params;
-	const x: number = +id;
+	//const x: number = +id;
 	const user = await prisma.user.findFirst({
 		where: {
-			UserID: x,
+			UserID: Number(id),
 		}
 	})
 	res.json(user);
@@ -82,7 +82,7 @@ export const getuser = async (req: Request, res: Response) => {
 export const addbox = async (req: Request, res: Response) => {
 	const { id } = req.params;
 	const serialNumber = req.body.serialNumber;
-	const y: number = +id;
+	//const y: number = +id;
 	const pbox = await prisma.planterbox.findFirst({
 		where: {
 			serialNumber: serialNumber,
@@ -94,7 +94,7 @@ export const addbox = async (req: Request, res: Response) => {
 		const registerbox = await prisma.planterbox.create({
 			data: {
 				serialNumber: serialNumber,
-				ownerID: y,
+				ownerID: Number(id),
 				SettingsID: null
 			},
 		});

@@ -91,7 +91,11 @@ export const addbox = async (req: Request, res: Response) => {
 		}
 	});
 	if (pbox !== null) {
-		res.send('This box is already registered!');
+		res.json({
+			serialNumber: null,
+			ownerID: null,
+			SettingsID: null
+		});
 	} else {
 		const registerbox = await prisma.planterbox.create({
 			data: {

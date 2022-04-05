@@ -1,143 +1,127 @@
 import { Request, Response } from 'express'
-import { PrismaClient } from '@prisma/client'
-const prisma:PrismaClient = new PrismaClient()
+import { prisma } from '../helper/prisma.client'
+import { returnModel } from '../Models/return.model';
+import { userModel } from '../Models/user.model'
 import * as bcrypt from "bcrypt"
+import { registerValidation } from '../helper/validator.user'
+import { loginModel } from '../Models/login.model'
+
 const salt = 10;
 
-export const register = async (req:Request,res:Response) => {
-    const email = req.body.email;
-	const username = req.body.username;
-	const password = req.body.password;
-	const password2 = req.body.password2;
-	const validateEmail = (email: string) => {
-		return email.match(
-		  /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-		);
-	  };
-	const valemail = await prisma.user.findFirst({
-		where: {
-			Email: email, 
-		}
-	});
-	const valusername = await prisma.user.findFirst({
-		where: {
-			UserName: username, 
-		}
-	});
-	const valpassword = await prisma.user.findFirst({
-		where: {
-			Password: password, 
-		}
-	});
-	
-	if (!username) {
-		res.send('Username is required!');
-	} else if (!email) {
-		res.send('Email is required!');
-	} else if (!password) {
-		res.send('Password is required!');
-	} else if (!password2) {
-		res.send('Confirmed Password is required!');
-	} else if (!validateEmail(email)) {
-		res.send('Invalid Email!');
-	} else if (password.length < 8){
-		res.send('Password should be 8 characters minimum!');
-	} else if (password2 !== password) {
-		res.send('Passwords are not matched!');
-	} else if (valemail !== null) {
-		res.send('This email is already used!');
-	} else if (valusername !== null) {
-		res.send('This username is already used!');
-	} else if (valpassword !== null) {
-		res.send('This password is already used!');
-	} else {
-		const password = await bcrypt.hash(req.body.password, salt)
-		console.log(password)
+export const register = async (req: Request, res: Response) => {
+	let result: returnModel = {
+		error: true,
+	}
+	const user: userModel = {
+		email: req.body.email,
+		username: req.body.username,
+		password: await bcrypt.hash(req.body.password, salt)
+	}
+	const userValidation = await registerValidation(user)
+	if (!Object.values(userValidation).every(Boolean)) {
 		const newUser = await prisma.user.create({
-			data : {
-				Email: req.body.email,
-				UserName: req.body.username,
-				Password: password,
+			data: {
+				Email: user.email,
+				UserName: user.username!,
+				Password: user.password,
 				Picture: null,
 				TotalUpvotes: 0
 			},
 		});
-        console.log('Registration Complete!');
-        res.json(newUser);
+		result.error = false
+		result.description = newUser
+		res.json(result)
+	} else {
+		result.error = true
+		result.description = userValidation
 	}
 }
 
-export const login = async (req:Request,res:Response) => {
-    const email = req.body.email;
-	const password = req.body.password;
-	if (email && password) {
-		const uservalidation = await prisma.user.findFirst({
-            where: {
-                Email: email,
-            }
-        });
-		if (uservalidation !== null && await bcrypt.compare(password,uservalidation.Password)){
-			res.send('Logged in!');
+export const login = async (req: Request, res: Response) => {
+	const user: userModel = {
+		email: req.body.email,
+		password: req.body.password
+	}
+	let loginValidator: loginModel = {
+		existedUser: false,
+		correctPassword: false
+	}
+	let result: returnModel = {
+		error: true,
+		description: loginValidator
+	}
+
+	if (user.email && user.password) {
+		const userValidation = await prisma.user.findFirst({
+			where: {
+				Email: user.email,
+			}
+		});
+		if (userValidation !== null && await bcrypt.compare(user.password, userValidation.Password)) {
+			result.error = false
+			loginValidator.correctPassword = true
 		} else {
-			res.send('Incorrect Username or Password!');
+			loginValidator.existedUser = true
 		}
 	} else {
-		res.send('Please enter Username and Password!');
+		result.error = true
 	}
+	res.json(result);
 }
 
-export const getuser = async (req:Request,res:Response) => {
-    const {id}  = req.params;
-    var x: number = +id;
+export const getuser = async (req: Request, res: Response) => {
+	const { id } = req.params;
+	//const x: number = +id;
 	const user = await prisma.user.findFirst({
 		where: {
-			UserID: x, 
+			UserID: Number(id),
 		}
 	})
 	res.json(user);
 }
 
-export const addbox = async (req:Request,res:Response) => {
-    const {id}  = req.params;
-	const boxid = req.body.boxid;
-    var y: number = +id;
+//changed from boxID to serialNumber because boxID auto increments by the DB, and serial# ties to the physical box
+export const addbox = async (req: Request, res: Response) => {
+	const { id } = req.params;
+	const serialNumber = req.body.serialNumber;
+	//const y: number = +id;
 	const pbox = await prisma.planterbox.findFirst({
 		where: {
-			boxID: boxid, 
+			serialNumber: serialNumber,
 		}
 	});
-	if (pbox !== null){
+	if (pbox !== null) {
 		res.send('This box is already registered!');
 	} else {
 		const registerbox = await prisma.planterbox.create({
-			data : {
-				boxID: boxid,
-				ownerID: y,
+			data: {
+				serialNumber: serialNumber,
+				ownerID: Number(id),
 				SettingsID: null
 			},
 		});
 		res.json(registerbox);
 	}
 }
-
 export const patchid = async (req: Request, res: Response) => {
-    const { id } = req.params
-    const user = await prisma.user.update({
-        where: {
-            UserID: Number(id),
-        },
-        data: req.body
-    })
-    res.json(user)
+	const { id } = req.params
+	const user = await prisma.user.update({
+		where: {
+			UserID: Number(id),
+		},
+		data: req.body
+	})
+	res.json(user)
 }
 
 //get all user planterboxes data
-export const getuserboxes = async(req: Request, res: Response) =>{
-    const { id } = req.params
-    const planterboxes = await prisma.planterbox.findMany({
-        where: {
-            ownerID: Number(id),
-        }
-    })
-    res.json(planterboxes)
+export const getuserboxes = async (req: Request, res: Response) => {
+	const { id } = req.params
+	const planterboxes = await prisma.planterbox.findMany({
+		where: {
+			ownerID: Number(id),
+		}
+	})
+	res.json(planterboxes)
 }
+

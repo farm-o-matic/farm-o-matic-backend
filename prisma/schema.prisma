@@ -37,22 +37,22 @@ model comments {
 }
 
 model fertilizerschedule {
-  time               DateTime           @db.Time(0)
+  FSID               Int                @id @default(autoincrement())
   SettingsID         Int
+  time               DateTime           @db.Time(0)
   Interval           Int
   planterboxsettings planterboxsettings @relation(fields: [SettingsID], references: [SettingsID], onDelete: Cascade, onUpdate: NoAction, map: "fertilizerschedule_ibfk_1")
 
-  @@id([time, SettingsID])
   @@index([SettingsID], map: "SettingsID")
 }
 
 model pesticideschedule {
-  time               DateTime           @db.Time(0)
+  PSID               Int                @id @default(autoincrement())
   SettingsID         Int
+  time               DateTime           @db.Time(0)
   Interval           Int
   planterboxsettings planterboxsettings @relation(fields: [SettingsID], references: [SettingsID], onDelete: Cascade, onUpdate: NoAction, map: "pesticideschedule_ibfk_1")
 
-  @@id([time, SettingsID])
   @@index([SettingsID], map: "SettingsID")
 }
 
@@ -60,6 +60,7 @@ model planterbox {
   boxID              Int                 @id @default(autoincrement())
   ownerID            Int
   SettingsID         Int?
+  serialNumber       Int
   planterboxsettings planterboxsettings? @relation(fields: [SettingsID], references: [SettingsID], onUpdate: NoAction, map: "planterbox_ibfk_2")
   user               user                @relation(fields: [ownerID], references: [UserID], onDelete: Cascade, onUpdate: NoAction, map: "planterbox_ibfk_1")
   sensordata         sensordata[]
@@ -89,12 +90,12 @@ model planterboxsettings {
 }
 
 model post {
-  title    String     @db.VarChar(255)
   PostID   Int        @id @default(autoincrement())
   contents String     @db.Text
   datetime DateTime   @db.DateTime(0)
-  posterID Int
+  title    String     @db.VarChar(255)
   votes    Int
+  posterID Int
   user     user       @relation(fields: [posterID], references: [UserID], onDelete: NoAction, onUpdate: NoAction, map: "post_ibfk_1")
   comments comments[]
 
@@ -114,13 +115,12 @@ model sensordata {
 }
 
 model user {
+  UserID       Int            @id @default(autoincrement())
   Email        String         @db.VarChar(127)
   UserName     String         @db.VarChar(16)
   Password     String         @db.VarChar(256)
   Picture      Bytes?         @db.Blob
   TotalUpvotes Int
-  UserID       Int            @id @default(autoincrement())
-  UserName     String         @db.VarChar(16)
   commentreply commentreply[]
   comments     comments[]
   planterbox   planterbox[]
@@ -128,11 +128,12 @@ model user {
 }
 
 model wateringschedule {
-  time               DateTime           @db.Time(0)
+  WSID               Int                @id @default(autoincrement())
   SettingsID         Int
+  time               DateTime           @db.Time(0)
+  duration           Int
   planterboxsettings planterboxsettings @relation(fields: [SettingsID], references: [SettingsID], onDelete: Cascade, onUpdate: NoAction, map: "wateringschedule_ibfk_1")
 
-  @@id([time, SettingsID])
   @@index([SettingsID], map: "SettingsID")
 }
 

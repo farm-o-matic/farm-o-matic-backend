@@ -16,6 +16,36 @@
    npx prisma generate
    ```
 7. Start backend server
-  ```
+   ```
    npm start
-  ```
+   ```
+##  These are endpoints
+### Login
+Method: post
+Route: /user/register
+Request JSON:  ```
+               {
+               "email": example@gmail.com,
+               "password": examplePassword
+               }
+               ```
+Response JSON: ```
+               #Correct username and password
+               {
+               "error": false,
+               "description": {
+                  "existedUser": true,
+                  "correctPassword": true
+                }
+               }
+               ```
+Response JSON: ```
+               #Incorrect username and password
+               {
+               "error": true,
+               "description": {
+                  "existedUser": false,
+                  "correctPassword": false
+                }
+               }
+               ```

@@ -73,16 +73,16 @@ model planterboxsettings {
   SettingsID         Int                             @id @default(autoincrement())
   SettingName        String?                         @db.VarChar(127)
   plantPicture       Bytes?                          @db.Blob
-  wateringMode       planterboxsettings_wateringMode
-  minMoisture        Float                           @db.Float
-  maxMoisture        Float                           @db.Float
-  minLightIntensity  Float                           @db.Float
-  maxLightIntensity  Float                           @db.Float
-  lightingMode       planterboxsettings_lightingMode
-  lightStartTime     DateTime                        @db.Time(0)
-  lightStopTime      DateTime                        @db.Time(0)
-  lightPower         Int
-  lightStatus        planterboxsettings_lightStatus
+  wateringMode       planterboxsettings_wateringMode @default(Manual)
+  minMoisture        Float                           @default(0) @db.Float
+  maxMoisture        Float                           @default(0.8) @db.Float
+  minLightIntensity  Float                           @default(1000) @db.Float
+  maxLightIntensity  Float                           @default(10000) @db.Float
+  lightingMode       planterboxsettings_lightingMode @default(Manual)
+  lightStartTime     DateTime                        @default(dbgenerated("'08:00:00'")) @db.Time(0)
+  lightStopTime      DateTime                        @default(dbgenerated("'18:00:00'")) @db.Time(0)
+  lightPower         Int                             @default(50)
+  lightStatus        planterboxsettings_lightStatus  @default(OFF)
   fertilizerschedule fertilizerschedule[]
   pesticideschedule  pesticideschedule[]
   planterbox         planterbox[]
@@ -103,14 +103,14 @@ model post {
 }
 
 model sensordata {
+  DataID         Int        @id @default(autoincrement())
   BoxID          Int
-  DateTime       DateTime   @db.DateTime(0)
+  DateTime       DateTime   @default(now()) @db.DateTime(0)
   Moisture       Float      @db.Float
   Temperature    Float      @db.Float
   LightIntensity Float      @db.Float
   planterbox     planterbox @relation(fields: [BoxID], references: [boxID], onDelete: Cascade, onUpdate: NoAction, map: "sensordata_ibfk_1")
 
-  @@id([BoxID, DateTime])
   @@index([BoxID], map: "BoxID")
 }
 
@@ -120,7 +120,7 @@ model user {
   UserName     String         @db.VarChar(16)
   Password     String         @db.VarChar(256)
   Picture      Bytes?         @db.Blob
-  TotalUpvotes Int
+  TotalUpvotes Int            @default(0)
   commentreply commentreply[]
   comments     comments[]
   planterbox   planterbox[]

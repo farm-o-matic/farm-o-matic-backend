@@ -109,6 +109,8 @@ export const addbox = async (req: Request, res: Response) => {
 }
 export const patchid = async (req: Request, res: Response) => {
 	const { id } = req.params
+
+	try{
 	const user = await prisma.user.update({
 		where: {
 			UserID: Number(id),
@@ -116,6 +118,12 @@ export const patchid = async (req: Request, res: Response) => {
 		data: req.body
 	})
 	res.json(user)
+	}catch(error){
+		res.json({
+			error: true,
+        	discription: 'The userID is not avaliable.',id
+		})
+	}
 }
 
 //get all user planterboxes data

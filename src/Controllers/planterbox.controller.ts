@@ -7,7 +7,7 @@ export const getboxsettings = async (req: Request, res: Response) => {
     const { id } = req.params
     const settings = await prisma.planterbox.findUnique({
         where: {
-            boxID: Number(id),
+            boxID: parseInt(id),
         },
         include: {
             planterboxsettings: true,

@@ -35,7 +35,7 @@ export const viewPresets = async (req: Request, res: Response) => {
 }
 
 export const createPreset = async (req: Request, res: Response) => {
-    const { SettingName, plantPicture, wateringMode, minMoisture, maxMoisture,
+    const { SettingName, plantPicture, wateringMode, waterStatus, minMoisture, maxMoisture,
         minLightIntensity, maxLightIntensity, lightingMode, lightStartTime,
         lightStopTime, lightPower, lightStatus } = req.body
 
@@ -44,6 +44,7 @@ export const createPreset = async (req: Request, res: Response) => {
             SettingName: SettingName,
             plantPicture: plantPicture,
             wateringMode: wateringMode,
+            waterStatus: waterStatus,
             minMoisture: minMoisture,
             maxMoisture: maxMoisture,
             minLightIntensity: minLightIntensity,
@@ -60,7 +61,7 @@ export const createPreset = async (req: Request, res: Response) => {
 
 export const updateBoxSettings = async (req: Request, res: Response) => {
     const { id } = req.params
-    const { SettingName, plantPicture, wateringMode, minMoisture, maxMoisture,
+    const { SettingName, plantPicture, wateringMode, waterStatus, minMoisture, maxMoisture,
         minLightIntensity, maxLightIntensity, lightingMode, lightStartTime,
         lightStopTime, lightPower, lightStatus } = req.body
 
@@ -71,6 +72,7 @@ export const updateBoxSettings = async (req: Request, res: Response) => {
                 SettingName: SettingName,
                 plantPicture: plantPicture,
                 wateringMode: wateringMode,
+                waterStatus: waterStatus,
                 minMoisture: minMoisture,
                 maxMoisture: maxMoisture,
                 minLightIntensity: minLightIntensity,

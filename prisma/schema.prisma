@@ -74,6 +74,7 @@ model planterboxsettings {
   SettingName        String?                         @db.VarChar(127)
   plantPicture       Bytes?                          @db.Blob
   wateringMode       planterboxsettings_wateringMode @default(Manual)
+  waterStatus        planterboxsettings_waterStatus  @default(OFF)
   minMoisture        Float                           @default(0) @db.Float
   maxMoisture        Float                           @default(0.8) @db.Float
   minLightIntensity  Float                           @default(1000) @db.Float
@@ -160,6 +161,11 @@ enum planterboxsettings_lightingMode {
 }
 
 enum planterboxsettings_lightStatus {
+  ON
+  OFF
+}
+
+enum planterboxsettings_waterStatus {
   ON
   OFF
 }

@@ -132,6 +132,9 @@ export const getuserboxes = async (req: Request, res: Response) => {
 	const planterboxes = await prisma.planterbox.findMany({
 		where: {
 			ownerID: Number(id),
+		},
+		include: {
+			planterboxsettings: true
 		}
 	})
 	res.json(planterboxes)

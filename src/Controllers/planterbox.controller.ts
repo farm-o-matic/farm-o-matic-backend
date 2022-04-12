@@ -61,13 +61,13 @@ export const createPreset = async (req: Request, res: Response) => {
 
 export const updateBoxSettings = async (req: Request, res: Response) => {
     // const { id } = req.params
-    const { SettingsID, SettingName, plantPicture, wateringMode, waterStatus, minMoisture, maxMoisture,
+    const { id, SettingName, plantPicture, wateringMode, waterStatus, minMoisture, maxMoisture,
         minLightIntensity, maxLightIntensity, lightingMode, lightStartTime,
         lightStopTime, lightPower, lightStatus } = req.body
 
     try {
         const settings = await prisma.planterboxsettings.update({
-            where: { SettingsID: parseInt(SettingsID) },
+            where: { SettingsID: parseInt(id) },
             data: {
                 SettingName: SettingName,
                 plantPicture: plantPicture,
@@ -87,7 +87,7 @@ export const updateBoxSettings = async (req: Request, res: Response) => {
 
         res.json(settings)
     } catch (error) {
-        res.json({ error: `Settings with ID does not exist in the database`, id: SettingsID })
+        res.json({ error: `Settings with ID does not exist in the database`, id: id })
     }
 
 }

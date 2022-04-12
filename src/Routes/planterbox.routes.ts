@@ -14,7 +14,7 @@ import {
 const router = Router()
 
 //get planterbox setting(not include schedule)
-router.get('/:id/settings', getboxsettings)
+router.get('/settings', getboxsettings)
 
 router.get('/viewPresets', viewPresets)
 

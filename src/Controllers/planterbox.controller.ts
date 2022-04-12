@@ -60,14 +60,14 @@ export const createPreset = async (req: Request, res: Response) => {
 }
 
 export const updateBoxSettings = async (req: Request, res: Response) => {
-    const { id } = req.params
-    const { SettingName, plantPicture, wateringMode, waterStatus, minMoisture, maxMoisture,
+    // const { id } = req.params
+    const { SettingsID, SettingName, plantPicture, wateringMode, waterStatus, minMoisture, maxMoisture,
         minLightIntensity, maxLightIntensity, lightingMode, lightStartTime,
         lightStopTime, lightPower, lightStatus } = req.body
 
     try {
         const settings = await prisma.planterboxsettings.update({
-            where: { SettingsID: Number(id) },
+            where: { SettingsID: parseInt(SettingsID) },
             data: {
                 SettingName: SettingName,
                 plantPicture: plantPicture,
@@ -87,17 +87,17 @@ export const updateBoxSettings = async (req: Request, res: Response) => {
 
         res.json(settings)
     } catch (error) {
-        res.json({ error: `Settings with ID does not exist in the database`, id: id })
+        res.json({ error: `Settings with ID does not exist in the database`, id: SettingsID })
     }
 
 }
 
 export const addWateringSchedule = async (req:Request, res:Response) => {
-    const { id } = req.params
-    const { time, duration } = req.body
+    // const { id } = req.params
+    const { id, time, duration } = req.body
     const schedule = await prisma.wateringschedule.create({
         data: {
-            SettingsID: Number(id),
+            SettingsID: parseInt(id),
             time: time,
             duration: duration
         }
@@ -106,12 +106,12 @@ export const addWateringSchedule = async (req:Request, res:Response) => {
 }
 
 export const updateWateringSchedule = async (req:Request, res:Response) => {
-    const { sid } = req.params
-    const { time, duration } = req.body
+    // const { sid } = req.params
+    const { sid, time, duration } = req.body
 
     try{
         const schedule = await prisma.wateringschedule.update({
-            where:{ WSID: Number(sid) },
+            where:{ WSID: parseInt(sid) },
             data: {
                 time: time,
                 duration: duration
@@ -124,12 +124,12 @@ export const updateWateringSchedule = async (req:Request, res:Response) => {
 }
 
 export const addFertilizerSchedule = async (req:Request, res:Response) => {
-    const { id } = req.params
-    const { time, Interval } = req.body
+    // const { id } = req.params
+    const { id, time, Interval } = req.body
     const schedule = await prisma.fertilizerschedule.create({
         data: {
             time: time,
-            SettingsID: Number(id),
+            SettingsID: parseInt(id),
             Interval: Interval
         }
     })
@@ -137,12 +137,12 @@ export const addFertilizerSchedule = async (req:Request, res:Response) => {
 }
 
 export const updateFertilizerSchedule =  async (req:Request, res:Response) => {
-    const { sid } = req.params
-    const { time, Interval } = req.body
+    // const { sid } = req.params
+    const { sid, time, Interval } = req.body
 
     try{
         const schedule = await prisma.fertilizerschedule.update({
-            where:{ FSID: Number(sid)},
+            where:{ FSID: parseInt(sid)},
             data: {
                 time: time,
                 Interval: Interval
@@ -155,12 +155,12 @@ export const updateFertilizerSchedule =  async (req:Request, res:Response) => {
 }
 
 export const addPesticideSchedule = async (req:Request, res:Response) => {
-    const { id } = req.params
-    const { time, Interval } = req.body
+    // const { id } = req.params
+    const { id, time, Interval } = req.body
     const schedule = await prisma.pesticideschedule.create({
         data: {
             time: time,
-            SettingsID: Number(id),
+            SettingsID: parseInt(id),
             Interval: Interval
         }
     })
@@ -168,12 +168,12 @@ export const addPesticideSchedule = async (req:Request, res:Response) => {
 }
 
 export const updatePesticideSchedule = async (req:Request, res:Response) => {
-    const { sid } = req.params
-    const { time, Interval } = req.body
+    // const { sid } = req.params
+    const { sid, time, Interval } = req.body
 
     try{
         const schedule = await prisma.pesticideschedule.update({
-            where:{ PSID: Number(sid)},
+            where:{ PSID: parseInt(sid)},
             data: {
                 time: time,
                 Interval: Interval

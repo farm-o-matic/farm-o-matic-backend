@@ -20,18 +20,18 @@ router.get('/viewPresets', viewPresets)
 
 router.post('/createPreset', createPreset)
 
-router.put('/settings/:id/updateBoxSettings', updateBoxSettings)
+router.put('/settings/updateBoxSettings', updateBoxSettings)
 
-router.post('/settings/:id/addWateringSchedule', addWateringSchedule)
+router.post('/settings/addWateringSchedule', addWateringSchedule)
 
-router.put('/settings/:sid/updateWateringSchedule', updateWateringSchedule)
+router.put('/settings/updateWateringSchedule', updateWateringSchedule)
 
-router.post('/settings/:id/addPesticideSchedule',addPesticideSchedule)
+router.post('/settings/addPesticideSchedule',addPesticideSchedule)
 
-router.put('/settings/:sid/updatePesticideSchedule',updatePesticideSchedule)
+router.put('/settings/updatePesticideSchedule',updatePesticideSchedule)
 
-router.post('/settings/:id/addFertilizerSchedule',addFertilizerSchedule)
+router.post('/settings/addFertilizerSchedule',addFertilizerSchedule)
 
-router.put('/settings/:sid/updateFertilizerSchedule', updateFertilizerSchedule)
+router.put('/settings/updateFertilizerSchedule', updateFertilizerSchedule)
 
 export default router

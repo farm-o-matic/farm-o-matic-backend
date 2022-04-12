@@ -4,7 +4,7 @@ export const getSchedule = async(req: Request, res: Response) =>{
     const { id } = req.params
     const setting = await prisma.planterboxsettings.findUnique({
         where: {
-            SettingsID: Number(id),
+            SettingsID: parseInt(id),
         },
         include: { 
             fertilizerschedule: true,

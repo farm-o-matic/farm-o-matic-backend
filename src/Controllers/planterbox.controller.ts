@@ -4,7 +4,7 @@ import { Request, Response } from 'express'
 import { prisma } from '../helper/prisma.client'
 
 export const getboxsettings = async (req: Request, res: Response) => {
-    const { id } = req.params
+    const { id } = req.body
     const settings = await prisma.planterbox.findUnique({
         where: {
             boxID: parseInt(id),

@@ -72,7 +72,7 @@ model planterbox {
 model planterboxsettings {
   SettingsID         Int                             @id @default(autoincrement())
   SettingName        String?                         @db.VarChar(127)
-  plantPicture       Bytes?                          @db.MediumBlob
+  plantPicture       Bytes?                          @db.Blob
   wateringMode       planterboxsettings_wateringMode @default(Manual)
   waterStatus        planterboxsettings_waterStatus  @default(OFF)
   minMoisture        Float                           @default(0) @db.Float
@@ -120,7 +120,7 @@ model user {
   Email        String         @db.VarChar(127)
   UserName     String         @db.VarChar(16)
   Password     String         @db.VarChar(256)
-  Picture      Bytes?         @db.MediumBlob
+  Picture      Bytes?         @db.Blob
   TotalUpvotes Int            @default(0)
   commentreply commentreply[]
   comments     comments[]
@@ -165,7 +165,7 @@ enum planterboxsettings_lightStatus {
   OFF
 }
 
-enum planterboxsettings_waterStatus {
+enum planterboxsettings_waterStatus{
   ON
   OFF
 }

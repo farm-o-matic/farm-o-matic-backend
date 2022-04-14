@@ -18,7 +18,7 @@ export const register = async (req: Request, res: Response) => {
 		password: await bcrypt.hash(req.body.password, salt)
 	}
 	const userValidation = await registerValidation(user)
-	if (!Object.values(userValidation).every(Boolean)) {
+	if (Object.values(userValidation).every(val => val === false)) {
 		const newUser = await prisma.user.create({
 			data: {
 				Email: user.email,
@@ -30,11 +30,11 @@ export const register = async (req: Request, res: Response) => {
 		});
 		result.error = false
 		result.description = newUser
-		res.json(result)
 	} else {
 		result.error = true
 		result.description = userValidation
 	}
+	res.json(result)
 }
 
 export const login = async (req: Request, res: Response) => {
@@ -83,7 +83,7 @@ export const getuser = async (req: Request, res: Response) => {
 //changed from boxID to serialNumber because boxID auto increments by the DB, and serial# ties to the physical box
 export const addbox = async (req: Request, res: Response) => {
 	const { id } = req.params;
-	const serialNumber = req.body.serialNumber;
+	const serialNumber = await req.body.serialNumber;
 	//const y: number = +id;
 	const pbox = await prisma.planterbox.findFirst({
 		where: {

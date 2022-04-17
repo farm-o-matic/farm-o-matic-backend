@@ -109,19 +109,24 @@ export const addbox = async (req: Request, res: Response) => {
 }
 export const patchid = async (req: Request, res: Response) => {
 	const { id } = req.params
-
-	try{
-	const user = await prisma.user.update({
-		where: {
-			UserID: Number(id),
-		},
-		data: req.body
-	})
-	res.json(user)
-	}catch(error){
+	const user: userModel = {
+		email: req.body.email,
+		username: req.body.username,
+		password: await bcrypt.hash(req.body.password, salt)
+	}
+	try {
+		const userUpdated = await prisma.user.update({
+			where: {
+				UserID: Number(id),
+			},
+			data: user
+		})
+		res.json(userUpdated)
+	} catch (error) {
 		res.json({
 			error: true,
-        	discription: 'The userID is not avaliable.',id
+			discription: 'The userID is not avaliable.', 
+			id: id
 		})
 	}
 }

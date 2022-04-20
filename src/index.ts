@@ -28,11 +28,12 @@ app.listen(port, () => {
     console.log(`The application is listening on port ${port}! \nor click: http://localhost:${port}/`)
 })
 
+const dateTime = new Date('1970-01-01T23:17:00.000Z')
+const cronArgs = dateTime.getUTCMinutes() +' '+ dateTime.getUTCHours() +' * * *'
 
-
-var task = cron.schedule('* * * * *', () => {
-    console.log('running every 1 min')
+var wateringTask = cron.schedule(cronArgs, () => {
+    console.log('running')
     timezone:"Asia/Bangkok"
 })
 
-task.start()
+wateringTask.start()

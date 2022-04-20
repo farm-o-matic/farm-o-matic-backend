@@ -3,6 +3,8 @@ import * as express from 'express'
 import userRouter from './Routes/user.routes'
 import planterboxRouter from './Routes/planterbox.routes'
 import pbsettingRouter from './Routes/pbsetting.routes'
+import schedulerRouter from './Routes/scheduler.routes'
+const cron = require('node-cron')
 
 const app:Application = express()
 const port:Number = 3000
@@ -20,6 +22,13 @@ app.use('/planterbox',planterboxRouter)
 
 app.use('/pbsetting', pbsettingRouter)
 
+app.use('/scheduler', schedulerRouter)
+
 app.listen(port, () => {
     console.log(`The application is listening on port ${port}! \nor click: http://localhost:${port}/`)
+})
+
+cron.schedule('* * * * * *', () => {
+    console.log('running every 1 sec')
+    timezone:"Asia/Bangkok"
 })

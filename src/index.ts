@@ -28,7 +28,11 @@ app.listen(port, () => {
     console.log(`The application is listening on port ${port}! \nor click: http://localhost:${port}/`)
 })
 
-cron.schedule('* * * * * *', () => {
-    console.log('running every 1 sec')
+
+
+var task = cron.schedule('* * * * *', () => {
+    console.log('running every 1 min')
     timezone:"Asia/Bangkok"
 })
+
+task.start()

@@ -28,6 +28,8 @@ app.listen(port, () => {
     console.log(`The application is listening on port ${port}! \nor click: http://localhost:${port}/`)
 })
 
+//need to call POST /planterbox/settings API with req body of { id: 2 } and take the res from the API to use in the scheduler below
+
 //scheduler
 const dateTime = new Date('1970-01-01T23:17:00.000Z')
 const cronArgs = dateTime.getUTCMinutes() +' '+ dateTime.getUTCHours() +' * * *'

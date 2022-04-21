@@ -43,13 +43,15 @@ export const fetchBoxSetting = async (id: string) => {
             }),
         }
         const setting = (await axios.request(config)).data
+        console.log(setting)
         return setting
     } catch (error) {
         console.error(error)
         return null
     }
 }
-console.log(fetchBoxSetting('2'))
+
+fetchBoxSetting('2')
 
 //scheduler needs the datetime value from box settings
 const dateTime = new Date('1970-01-01T09:00:00.000Z')

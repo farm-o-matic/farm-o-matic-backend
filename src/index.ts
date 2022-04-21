@@ -35,6 +35,7 @@ const cronArgs = dateTime.getUTCMinutes() +' '+ dateTime.getUTCHours() +' * * *'
 var wateringTask = cron.schedule(cronArgs, () => {
     console.log('running')
     timezone:"Asia/Bangkok"
+    //put code to trigger watering here
 })
 
 wateringTask.start()

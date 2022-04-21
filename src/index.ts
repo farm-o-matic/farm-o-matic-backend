@@ -4,7 +4,9 @@ import userRouter from './Routes/user.routes'
 import planterboxRouter from './Routes/planterbox.routes'
 import pbsettingRouter from './Routes/pbsetting.routes'
 import schedulerRouter from './Routes/scheduler.routes'
-const cron = require('node-cron')
+import * as cron from 'node-cron'
+import axios from 'axios'
+import { requestMethod } from './Models/requestMethod.model'
 
 const app:Application = express()
 const port:Number = 3000
@@ -30,14 +32,32 @@ app.listen(port, () => {
 
 //need to call POST /planterbox/settings API with req body of { id: 2 } and take the res from the API to use in the scheduler below
 
-//scheduler
-const dateTime = new Date('1970-01-01T23:17:00.000Z')
+export const fetchBoxSetting = async (id: string) => {
+    try {
+        const config = {
+            method: requestMethod.post,
+            headers: { 'content-type': 'application/json' },
+            url: 'http://localhost:3000/planterbox/settings',
+            data: JSON.stringify({
+                id: id,
+            }),
+        }
+        const setting = (await axios.request(config)).data
+        return setting
+    } catch (error) {
+        console.error(error)
+        return null
+    }
+}
+console.log(fetchBoxSetting('2'))
+
+//scheduler needs the datetime value from box settings
+const dateTime = new Date('1970-01-01T09:00:00.000Z')
 const cronArgs = dateTime.getUTCMinutes() +' '+ dateTime.getUTCHours() +' * * *'
 
-var wateringTask = cron.schedule(cronArgs, () => {
+let wateringTask = cron.schedule(cronArgs, () => {
     console.log('running')
     timezone:"Asia/Bangkok"
-    //put code to trigger watering here
+    //put code to trigger watering here; wait for Smart to make code
 })
-
 wateringTask.start()

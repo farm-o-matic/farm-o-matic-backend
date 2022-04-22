@@ -3,3 +3,9 @@ export interface userModel {
     username?: string
     password: string
 }
+
+export interface userModelToUpdate{
+    Email?: string
+    UserName?: string
+    Password?: string
+}

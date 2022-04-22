@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { prisma } from '../helper/prisma.client'
 import { returnModel } from '../Models/return.model';
-import { userModel } from '../Models/user.model'
+import { userModel,userModelToUpdate } from '../Models/user.model'
 import * as bcrypt from "bcrypt"
 import { registerValidation } from '../helper/validator.user'
 import { loginModel } from '../Models/login.model'
@@ -30,9 +30,11 @@ export const register = async (req: Request, res: Response) => {
 		});
 		result.error = false
 		result.description = newUser
+		console.log(`User ${newUser} registered!`)
 	} else {
 		result.error = true
 		result.description = userValidation
+		console.error("Failed to register.")
 	}
 	res.json(result)
 }
@@ -107,13 +109,15 @@ export const addbox = async (req: Request, res: Response) => {
 		res.json(registerbox);
 	}
 }
+//@TO-DO: validate the username and email are not similar with other users. 
 export const patchid = async (req: Request, res: Response) => {
 	const { id } = req.params
-	const user: userModel = {
-		email: req.body.email,
-		username: req.body.username,
-		password: await bcrypt.hash(req.body.password, salt)
+	const user: userModelToUpdate = {
+		Email: req.body.email,
+		UserName: req.body.username,
+		Password: await bcrypt.hash(req.body.password, salt)
 	}
+	console.log(user)
 	try {
 		const userUpdated = await prisma.user.update({
 			where: {
@@ -128,6 +132,7 @@ export const patchid = async (req: Request, res: Response) => {
 			discription: 'The userID is not avaliable.', 
 			id: id
 		})
+		console.log(error)
 	}
 }
 

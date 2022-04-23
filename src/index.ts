@@ -4,7 +4,7 @@ import userRouter from './Routes/user.routes'
 import planterboxRouter from './Routes/planterbox.routes'
 import pbsettingRouter from './Routes/pbsetting.routes'
 import * as cron from 'node-cron'
-import { setting, fetchBoxSetting, toCronArgs } from './Controllers/scheduler.controller'
+import { setting, fetchBoxSetting, conArgs, fetchBoxSchedule, durationArgs, schedule } from './Controllers/scheduler.controller'
 
 const app:Application = express()
 const port:Number = 3000
@@ -31,7 +31,19 @@ app.listen(port, () => {
 ////////////////////////////
 
 cron.schedule('*/3 * * * * *', () => { //this scheduler will fecth the settings every minute, but here I set it to 3 sec for testing
-    fetchBoxSetting('2')//I'm getting the settings for boxID 2 for testing
+    fetchBoxSetting('2')//I'm getting the settings and schedules for boxID 2 for testing
+    fetchBoxSchedule('2')
+
+    if(setting.wateringMode == 'Schedule'){
+        waterStartTask.start()
+        waterStopTask.start()
+    } else if(setting.wateringMode == 'Manual'){
+        waterStartTask.stop()
+        waterStopTask.stop()
+    } else if(setting.wateringMode == 'Auto'){
+        waterStartTask.stop()
+        waterStopTask.stop()
+    }
 
     if(setting.lightingMode == 'Schedule'){
         lightStartTask.start()
@@ -49,14 +61,26 @@ cron.schedule('*/3 * * * * *', () => { //this scheduler will fecth the settings 
 //SCHEDULERS START HERE/////
 ////////////////////////////
 
-let lightStartTask = cron.schedule(toCronArgs(setting.lightStartTime), () => {
-    console.log('running')
+let lightStartTask = cron.schedule(conArgs(setting.lightStartTime), () => {
+    console.log('turning lights on')
     timezone:"Asia/Bangkok"
     //put code to TURN ON LIGHTS here
 })
 
-let lightStopTask = cron.schedule(toCronArgs(setting.lightStopTime), () => {
-    console.log('running')
+let lightStopTask = cron.schedule(conArgs(setting.lightStopTime), () => {
+    console.log('turning lights off')
     timezone:"Asia/Bangkok"
     //put code to TURN OFF LIGHTS here
+})
+
+let waterStartTask = cron.schedule(conArgs(schedule.wateringschedule[0].time), () => {
+    timezone:"Asia/Bangkok"
+    console.log('turninf watering on')
+    //put code to TURN ON WATER here
+})
+
+let waterStopTask = cron.schedule(durationArgs(schedule.wateringschedule[0].time, schedule.wateringschedule[0].duration), () => {
+    timezone:"Asia/Bangkok"
+    console.log('turninf watering off')
+    //put code to TURN OFF WATER here
 })

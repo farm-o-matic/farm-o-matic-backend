@@ -3,6 +3,7 @@ import * as express from 'express'
 import userRouter from './Routes/user.routes'
 import planterboxRouter from './Routes/planterbox.routes'
 import pbsettingRouter from './Routes/pbsetting.routes'
+import { settingModel } from './Models/setting.model'
 import * as cron from 'node-cron'
 import axios from 'axios'
 import { requestMethod } from './Models/requestMethod.model'
@@ -28,10 +29,13 @@ app.listen(port, () => {
 })
 
 ////////////////////////////
-//MAIN CONTROLLER STARTS HERE/////
+//CONTROLLER STARTS HERE////
 ////////////////////////////
 
 //will move API to separate file later
+
+let setting: settingModel
+
 export const fetchBoxSetting = async (id: string) => {
     try {
         const config = {
@@ -42,18 +46,15 @@ export const fetchBoxSetting = async (id: string) => {
                 id: id,
             }),
         }
-        const setting = (await axios.request(config)).data
-        //I get the value if I log 'setting' here, but...
-        return setting
+        setting = (await axios.request(config)).data
     } catch (error) {
         console.error(error)
-        return null
     }
 }
 
 cron.schedule('*/3 * * * * *', () => { //this scheduler will fecth the settings every minute, but here I set it to 3 sec for testing
-
-    console.log(fetchBoxSetting('2')) //when I call it here, I just get 'Promise { <pending> }'
+    fetchBoxSetting('2')
+    console.log(setting)
 
     if(true){
         lightingTask.start()

@@ -31,13 +31,17 @@ app.listen(port, () => {
 ////////////////////////////
 
 cron.schedule('*/3 * * * * *', () => { //this scheduler will fecth the settings every minute, but here I set it to 3 sec for testing
-    fetchBoxSetting('2')
-    console.log(setting)
+    fetchBoxSetting('2')//I'm getting the settings for boxID 2 for testing
 
-    if(setting.lightingMode == 'SCHEDULE'){
-        lightingTask.start()
-    } else if(setting.lightingMode == 'MANUAL'){
-        lightingTask.stop()
+    if(setting.lightingMode == 'Schedule'){
+        lightStartTask.start()
+        lightStopTask.start()
+    } else if(setting.lightingMode == 'Manual'){
+        lightStartTask.stop()
+        lightStopTask.stop()
+    } else if(setting.lightingMode == 'Auto'){
+        lightStartTask.stop()
+        lightStopTask.stop()
     }
 })
 
@@ -45,8 +49,14 @@ cron.schedule('*/3 * * * * *', () => { //this scheduler will fecth the settings 
 //SCHEDULERS START HERE/////
 ////////////////////////////
 
-let lightingTask = cron.schedule(toCronArgs('1970-01-01T09:00:00.000Z'), () => {//will have to replace the string with lightStartTime from the settings JSON
+let lightStartTask = cron.schedule(toCronArgs(setting.lightStartTime), () => {
     console.log('running')
     timezone:"Asia/Bangkok"
-    //put code to trigger watering here; wait for Smart to make code
+    //put code to TURN ON LIGHTS here
+})
+
+let lightStopTask = cron.schedule(toCronArgs(setting.lightStopTime), () => {
+    console.log('running')
+    timezone:"Asia/Bangkok"
+    //put code to TURN OFF LIGHTS here
 })

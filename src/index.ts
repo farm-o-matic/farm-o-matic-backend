@@ -3,7 +3,6 @@ import * as express from 'express'
 import userRouter from './Routes/user.routes'
 import planterboxRouter from './Routes/planterbox.routes'
 import pbsettingRouter from './Routes/pbsetting.routes'
-import schedulerRouter from './Routes/scheduler.routes'
 import * as cron from 'node-cron'
 import axios from 'axios'
 import { requestMethod } from './Models/requestMethod.model'
@@ -24,14 +23,15 @@ app.use('/planterbox',planterboxRouter)
 
 app.use('/pbsetting', pbsettingRouter)
 
-app.use('/scheduler', schedulerRouter)
-
 app.listen(port, () => {
     console.log(`The application is listening on port ${port}! \nor click: http://localhost:${port}/`)
 })
 
-//need to call POST /planterbox/settings API with req body of { id: 2 } and take the res from the API to use in the scheduler below
+////////////////////////////
+//MAIN CONTROLLER STARTS HERE/////
+////////////////////////////
 
+//will move API to separate file later
 export const fetchBoxSetting = async (id: string) => {
     try {
         const config = {
@@ -43,7 +43,7 @@ export const fetchBoxSetting = async (id: string) => {
             }),
         }
         const setting = (await axios.request(config)).data
-        console.log(setting)
+        //I get the value if I log 'setting' here, but...
         return setting
     } catch (error) {
         console.error(error)
@@ -51,15 +51,26 @@ export const fetchBoxSetting = async (id: string) => {
     }
 }
 
-fetchBoxSetting('2')
+cron.schedule('*/3 * * * * *', () => { //this scheduler will fecth the settings every minute, but here I set it to 3 sec for testing
 
-//scheduler needs the datetime value from box settings
-const dateTime = new Date('1970-01-01T09:00:00.000Z')
-const cronArgs = dateTime.getUTCMinutes() +' '+ dateTime.getUTCHours() +' * * *'
+    console.log(fetchBoxSetting('2')) //when I call it here, I just get 'Promise { <pending> }'
 
-let wateringTask = cron.schedule(cronArgs, () => {
+    if(true){
+        lightingTask.start()
+    }
+})
+
+////////////////////////////
+//SCHEDULERS START HERE/////
+////////////////////////////
+
+function toCronArgs(input: string){ //this function converts UTC datetime to a time argument for the cron scheduler
+    const dateTime = new Date(input)
+    return dateTime.getUTCMinutes() + ' ' + dateTime.getUTCHours() + ' * * *'
+}
+
+let lightingTask = cron.schedule(toCronArgs('1970-01-01T09:00:00.000Z'), () => {//will have to replace the string with lightStartTime from the settings JSON
     console.log('running')
     timezone:"Asia/Bangkok"
     //put code to trigger watering here; wait for Smart to make code
 })
-wateringTask.start()

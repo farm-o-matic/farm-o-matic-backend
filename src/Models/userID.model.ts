@@ -1,3 +1,4 @@
 export interface userIDModel {
-    UserID?: Number
+    UserID?: Number,
+    UserName?: string
 }

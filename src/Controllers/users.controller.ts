@@ -50,7 +50,8 @@ export const login = async (req: Request, res: Response) => {
 		correctPassword: false
 	}
 	let UID : userIDModel = {
-		UserID : 0
+		UserID : 0,
+		UserName : 'none'
 	}
 
 	let result: returnModel = { //แก้ตัวนี้
@@ -72,7 +73,7 @@ export const login = async (req: Request, res: Response) => {
 			result.error = false
 			loginValidator.correctPassword = true
 			UID.UserID = userValidation.UserID
-			console.log(UID)
+			UID.UserName = userValidation.UserName
 		} else {
 			loginValidator.existedUser = true
 		}

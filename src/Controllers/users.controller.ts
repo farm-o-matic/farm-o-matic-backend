@@ -5,6 +5,7 @@ import { userModel,userModelToUpdate } from '../Models/user.model'
 import * as bcrypt from "bcrypt"
 import { registerValidation } from '../helper/validator.user'
 import { loginModel } from '../Models/login.model'
+import { userIDModel } from '../Models/userID.model'
 
 const salt = 10;
 
@@ -48,9 +49,17 @@ export const login = async (req: Request, res: Response) => {
 		existedUser: false,
 		correctPassword: false
 	}
-	let result: returnModel = {
+	let UID : userIDModel = {
+		UserID : 0
+	}
+
+	let result: returnModel = { //แก้ตัวนี้
 		error: true,
-		description: loginValidator
+		description: {
+			
+				loginValidator,
+				UID
+		}
 	}
 
 	if (user.email && user.password) {
@@ -62,6 +71,8 @@ export const login = async (req: Request, res: Response) => {
 		if (userValidation !== null && await bcrypt.compare(user.password, userValidation.Password)) {
 			result.error = false
 			loginValidator.correctPassword = true
+			UID.UserID = userValidation.UserID
+			console.log(UID)
 		} else {
 			loginValidator.existedUser = true
 		}

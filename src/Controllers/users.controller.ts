@@ -101,7 +101,7 @@ export const addbox = async (req: Request, res: Response) => {
 			data: {
 				serialNumber: serialNumber,
 				ownerID: Number(id),
-				SettingsID: null
+				SettingsID: 0
 			},
 		});
 		res.json(registerbox);

@@ -1,10 +1,11 @@
 import { Request, Response } from 'express'
 import { prisma } from '../helper/prisma.client'
 import { returnModel } from '../Models/return.model';
-import { userModel } from '../Models/user.model'
+import { userModel,userModelToUpdate } from '../Models/user.model'
 import * as bcrypt from "bcrypt"
 import { registerValidation } from '../helper/validator.user'
 import { loginModel } from '../Models/login.model'
+import { userIDModel } from '../Models/userID.model'
 
 const salt = 10;
 
@@ -30,9 +31,11 @@ export const register = async (req: Request, res: Response) => {
 		});
 		result.error = false
 		result.description = newUser
+		console.log(`User ${newUser} registered!`)
 	} else {
 		result.error = true
 		result.description = userValidation
+		console.error("Failed to register.")
 	}
 	res.json(result)
 }
@@ -46,9 +49,18 @@ export const login = async (req: Request, res: Response) => {
 		existedUser: false,
 		correctPassword: false
 	}
-	let result: returnModel = {
+	let UID : userIDModel = {
+		UserID : 0,
+		UserName : 'none'
+	}
+
+	let result: returnModel = { //แก้ตัวนี้
 		error: true,
-		description: loginValidator
+		description: {
+			
+				loginValidator,
+				UID
+		}
 	}
 
 	if (user.email && user.password) {
@@ -60,6 +72,8 @@ export const login = async (req: Request, res: Response) => {
 		if (userValidation !== null && await bcrypt.compare(user.password, userValidation.Password)) {
 			result.error = false
 			loginValidator.correctPassword = true
+			UID.UserID = userValidation.UserID
+			UID.UserName = userValidation.UserName
 		} else {
 			loginValidator.existedUser = true
 		}
@@ -107,22 +121,30 @@ export const addbox = async (req: Request, res: Response) => {
 		res.json(registerbox);
 	}
 }
+//@TO-DO: validate the username and email are not similar with other users. 
 export const patchid = async (req: Request, res: Response) => {
 	const { id } = req.params
-
-	try{
-	const user = await prisma.user.update({
-		where: {
-			UserID: Number(id),
-		},
-		data: req.body
-	})
-	res.json(user)
-	}catch(error){
+	const user: userModelToUpdate = {
+		Email: req.body.email,
+		UserName: req.body.username,
+		Password: await bcrypt.hash(req.body.password, salt)
+	}
+	console.log(user)
+	try {
+		const userUpdated = await prisma.user.update({
+			where: {
+				UserID: Number(id),
+			},
+			data: user
+		})
+		res.json(userUpdated)
+	} catch (error) {
 		res.json({
 			error: true,
-        	discription: 'The userID is not avaliable.',id
+			discription: 'The userID is not avaliable.', 
+			id: id
 		})
+		console.log(error)
 	}
 }
 

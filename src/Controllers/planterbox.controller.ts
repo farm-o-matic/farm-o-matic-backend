@@ -35,10 +35,10 @@ export const viewPresets = async (req: Request, res: Response) => {
 }
 
 export const selectPreset = async (req:Request, res: Response) => {
-    const { id } = req.body
+    const { settingsID, boxID } = req.body
     const preset = await prisma.planterboxsettings.findUnique({
         where: {
-            SettingsID: parseInt(id),
+            SettingsID: parseInt(settingsID),
         },
         include: {
             wateringschedule: true,
@@ -74,6 +74,14 @@ export const selectPreset = async (req:Request, res: Response) => {
 
             },       
         })
+        await prisma.planterbox.update({
+            where: {
+                boxID: boxID
+            }, data: {
+                SettingsID: result.SettingsID
+            }
+        })
+        
         res.json(result)
     }
     

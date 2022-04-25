@@ -6,7 +6,9 @@ export const searchWiki = async (req: Request, res: Response) => {
     try{
         const plantdata = await prisma.wikientry.findFirst({
             where: {
-                plantname: plantname,
+                plantname: {
+                    contains: plantname,
+                }
             }
         })
         res.json(plantdata)

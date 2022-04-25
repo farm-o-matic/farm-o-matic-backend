@@ -34,6 +34,51 @@ export const viewPresets = async (req: Request, res: Response) => {
     res.json(presets)
 }
 
+export const selectPreset = async (req:Request, res: Response) => {
+    const { id } = req.body
+    const preset = await prisma.planterboxsettings.findUnique({
+        where: {
+            SettingsID: parseInt(id),
+        },
+        include: {
+            wateringschedule: true,
+            fertilizerschedule: true,
+            pesticideschedule: true
+        },
+    })
+
+    if(preset != null){
+
+        const result = await prisma.planterboxsettings.create({
+            data: {
+                SettingName: preset.SettingName,
+                plantPicture: preset.plantPicture,
+                wateringMode: preset.wateringMode,
+                waterStatus: preset.waterStatus,
+                minMoisture: preset.minMoisture,
+                maxMoisture: preset.maxMoisture,
+                minLightIntensity: preset.minLightIntensity,
+                maxLightIntensity: preset.maxLightIntensity,
+                lightingMode: preset.lightingMode,
+                lightStartTime: preset.lightStartTime,
+                lightStopTime: preset.lightStopTime,
+                lightPower: preset.lightPower,
+                lightStatus: preset.lightStatus
+            },       
+        })
+        await prisma.wateringschedule.create({
+            data: {
+                SettingsID: result.SettingsID,
+                time: preset.wateringschedule[0].time,
+                duration: preset.wateringschedule[0].duration
+
+            },       
+        })
+        res.json(result)
+    }
+    
+}
+
 export const createPreset = async (req: Request, res: Response) => {
     const { SettingName, plantPicture, wateringMode, waterStatus, minMoisture, maxMoisture,
         minLightIntensity, maxLightIntensity, lightingMode, lightStartTime,

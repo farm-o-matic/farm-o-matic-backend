@@ -10,7 +10,8 @@ import {
     updateFertilizerSchedule,
     addPesticideSchedule,
     updatePesticideSchedule,
-    addFertilizerSchedule
+    addFertilizerSchedule,
+    selectPreset
 } from '../Controllers/planterbox.controller'
 const router = Router()
 
@@ -18,6 +19,8 @@ const router = Router()
 router.post('/settings', getboxsettings)
 
 router.get('/viewPresets', viewPresets)
+
+router.post('/selectPreset', selectPreset)
 
 router.post('/createPreset', createPreset)
 

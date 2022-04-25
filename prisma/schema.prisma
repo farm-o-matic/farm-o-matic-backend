@@ -165,7 +165,7 @@ enum planterboxsettings_lightStatus {
   OFF
 }
 
-enum planterboxsettings_waterStatus{
+enum planterboxsettings_waterStatus {
   ON
   OFF
 }

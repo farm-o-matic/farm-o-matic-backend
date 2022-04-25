@@ -3,6 +3,7 @@ import * as express from 'express'
 import userRouter from './Routes/user.routes'
 import planterboxRouter from './Routes/planterbox.routes'
 import pbsettingRouter from './Routes/pbsetting.routes'
+import wikiRouter from './Routes/wiki.routes'
 import * as cron from 'node-cron'
 import { setting, fetchBoxSetting, conArgs, fetchBoxSchedule, durationArgs, schedule } from './Controllers/scheduler.controller'
 
@@ -21,6 +22,8 @@ app.use('/user',userRouter)
 app.use('/planterbox',planterboxRouter)
 
 app.use('/pbsetting', pbsettingRouter)
+
+app.use('/wiki', wikiRouter)
 
 app.listen(port, () => {
     console.log(`The application is listening on port ${port}! \nor click: http://localhost:${port}/`)

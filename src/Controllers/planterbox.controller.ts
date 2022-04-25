@@ -59,6 +59,20 @@ export const createPreset = async (req: Request, res: Response) => {
     res.json(result)
 }
 
+export const deleteBox = async (req: Request, res: Response) => {
+    const { id } = req.body
+    try {
+        const deleteBox = await prisma.planterbox.delete({
+            where: {
+                boxID: parseInt(id), 
+            },
+        })
+        res.json(deleteBox)
+    }catch (error) {
+        res.json({ error: `Planterbox with ID does not exist in the database`, id: id })
+    }
+}
+
 export const updateBoxSettings = async (req: Request, res: Response) => {
     // const { id } = req.params
     const { id, SettingName, plantPicture, wateringMode, waterStatus, minMoisture, maxMoisture,

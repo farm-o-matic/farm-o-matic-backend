@@ -3,6 +3,7 @@ import {
     getboxsettings,
     viewPresets,
     createPreset,
+    deleteBox,
     updateBoxSettings,
     addWateringSchedule,
     updateWateringSchedule,
@@ -19,6 +20,8 @@ router.post('/settings', getboxsettings)
 router.get('/viewPresets', viewPresets)
 
 router.post('/createPreset', createPreset)
+
+router.delete('/delete', deleteBox)
 
 router.put('/settings/updateBoxSettings', updateBoxSettings)
 

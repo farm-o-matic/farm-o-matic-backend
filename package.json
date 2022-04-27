@@ -38,6 +38,7 @@
     "bcrypt": "^5.0.1",
     "express": "^4.17.3",
     "jsonwebtoken": "^8.5.1",
+    "mqtt": "^4.3.7",
     "node-cron": "^3.0.0",
     "nodemon": "^2.0.15",
     "pg-promise": "^10.11.1"

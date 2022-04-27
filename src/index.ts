@@ -120,5 +120,11 @@ mqttClient.on('connect', () => {
     })
 })
 
-//sensor/watering
-//sensor/light
+mqttClient.on('disconnect',()=>{
+    console.log('mqtt broker is disconnected')
+
+})
+
+// mqttClient.on('message',(topic,message)=>{
+//     console.log(message.toString())
+// })

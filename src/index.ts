@@ -72,24 +72,28 @@ let lightStartTask = cron.schedule(conArgs(setting.lightStartTime), () => {
     console.log('turning lights on')
     timezone: "Asia/Bangkok"
     //put code to TURN ON LIGHTS here
+    mqttClient.publish('command1', '0')
 })
 
 let lightStopTask = cron.schedule(conArgs(setting.lightStopTime), () => {
     console.log('turning lights off')
     timezone: "Asia/Bangkok"
     //put code to TURN OFF LIGHTS here
+    mqttClient.publish('command1', '1')
 })
 
 let waterStartTask = cron.schedule(conArgs(schedule.wateringschedule[0].time), () => {
     timezone: "Asia/Bangkok"
     console.log('turninf watering on')
     //put code to TURN ON WATER here
+    mqttClient.publish('command2', '0')
 })
 
 let waterStopTask = cron.schedule(durationArgs(schedule.wateringschedule[0].time, schedule.wateringschedule[0].duration), () => {
     timezone: "Asia/Bangkok"
     console.log('turninf watering off')
     //put code to TURN OFF WATER here
+    mqttClient.publish('command2', '1')
 })
 
 ////////////////////////
@@ -111,7 +115,7 @@ let waterStopTask = cron.schedule(durationArgs(schedule.wateringschedule[0].time
 
 mqttClient.on('connect', () => {
     console.log('Mqtt broker is connected')
-    mqttClient.subscribe({ 'sensor/#': { qos: 2 } }, (err) => {
+    mqttClient.subscribe({ 'sensor/#': { qos: 2 } }, (err: any) => {
         if (!err) {
             mqttClient.publish('test/1', 'Hello mqtt')
         } else {

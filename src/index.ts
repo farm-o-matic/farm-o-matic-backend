@@ -9,7 +9,7 @@ import * as cron from 'node-cron'
 //mqtt
 // import { mqttBrokerInterface } from './Models/mqttBroker.model'
 // import * as mqtt from "mqtt"
-import { mqttClient } from './helper/mqtt.client' 
+import { mqttClient } from './helper/mqtt.client'
 
 const app: Application = express()
 const port: Number = 3000
@@ -111,7 +111,7 @@ let waterStopTask = cron.schedule(durationArgs(schedule.wateringschedule[0].time
 
 mqttClient.on('connect', () => {
     console.log('Mqtt broker is connected')
-    mqttClient.subscribe({ 'sensor/#': { qos: 2 } }, (err) => {
+    mqttClient.subscribe('sensor/#', { qos: 2, rap: true }, (err) => {
         if (!err) {
             mqttClient.publish('test/1', 'Hello mqtt')
         } else {
@@ -120,11 +120,36 @@ mqttClient.on('connect', () => {
     })
 })
 
-mqttClient.on('disconnect',()=>{
+mqttClient.on('disconnect', () => {
     console.log('mqtt broker is disconnected')
 
 })
+enum sensor {
+    rh = 'rh',
+    temp = 'temp',
+    watering = 'watering',
 
-// mqttClient.on('message',(topic,message)=>{
-//     console.log(message.toString())
-// })
+}
+mqttClient.on('message', (topic, message) => {
+    const topicSpec = topic.split('/')
+    const mess = message.toString()
+    if (topicSpec[0] === 'sensor') {
+        switch (topicSpec[1]) {
+            case sensor.rh: {
+                console.log('rh', mess)
+            }
+            case sensor.watering: {
+                console.log(sensor.watering, mess)
+            }
+            case sensor.temp: {
+                console.log(sensor.temp, mess)
+            }
+            default: {
+                console.log(topicSpec[1], mess)
+            }
+        }
+    } else {
+        console.log(topicSpec)
+    }
+    //TUM ADD TO DATABASE WITH THIS NA. 
+})

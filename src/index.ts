@@ -115,11 +115,7 @@ let waterStopTask = cron.schedule(durationArgs(schedule.wateringschedule[0].time
 
 mqttClient.on('connect', () => {
     console.log('Mqtt broker is connected')
-<<<<<<< HEAD
     mqttClient.subscribe('sensor/#', { qos: 2, rap: true }, (err) => {
-=======
-    mqttClient.subscribe({ 'sensor/#': { qos: 2 } }, (err: any) => {
->>>>>>> 236ec36363a51c18ed2d050b52d6d0410775b8ba
         if (!err) {
             mqttClient.publish('test/1', 'Hello mqtt')
         } else {
@@ -136,6 +132,7 @@ enum sensor {
     rh = 'rh',
     temp = 'temp',
     watering = 'watering',
+    light = 'light'
 
 }
 mqttClient.on('message', (topic, message) => {
@@ -151,6 +148,9 @@ mqttClient.on('message', (topic, message) => {
             }
             case sensor.temp: {
                 console.log(sensor.temp, mess)
+            }
+            case sensor.light:{
+                console.log(sensor.light,mess)
             }
             default: {
                 console.log(topicSpec[1], mess)

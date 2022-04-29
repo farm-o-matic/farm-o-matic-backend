@@ -142,10 +142,13 @@ model wikientry {
   entryID       Int    @id @default(autoincrement())
   plantname     String @db.VarChar(255)
   plantdesc     String @db.Text
+  climate       String @db.Text
+  tips          String @db.Text
   fertilizer    String @db.Text
   pesticide     String @db.Text
   amountofwater String @db.Text
-  LightExposure String @db.Text
+  lightexposure String @db.Text
+  growingtime   String @db.Text
 }
 
 enum planterboxsettings_wateringMode {

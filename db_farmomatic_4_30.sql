@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.28, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: database_farmomatic_auto
+-- Host: localhost    Database: database_farmomatic_auto
 -- ------------------------------------------------------
 -- Server version	8.0.28
 
@@ -103,6 +103,60 @@ LOCK TABLES `fertilizerschedule` WRITE;
 /*!40000 ALTER TABLE `fertilizerschedule` DISABLE KEYS */;
 INSERT INTO `fertilizerschedule` VALUES (1,1,'12:00:00',15),(2,2,'14:20:00',10),(3,3,'15:35:00',20);
 /*!40000 ALTER TABLE `fertilizerschedule` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `lightintensity`
+--
+
+DROP TABLE IF EXISTS `lightintensity`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `lightintensity` (
+  `DataID` int NOT NULL AUTO_INCREMENT,
+  `BoxID` int DEFAULT NULL,
+  `lightIntensity` float DEFAULT NULL,
+  `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`DataID`),
+  KEY `BoxID` (`BoxID`),
+  CONSTRAINT `lightintensity_ibfk_1` FOREIGN KEY (`BoxID`) REFERENCES `planterbox` (`boxID`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `lightintensity`
+--
+
+LOCK TABLES `lightintensity` WRITE;
+/*!40000 ALTER TABLE `lightintensity` DISABLE KEYS */;
+/*!40000 ALTER TABLE `lightintensity` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `moisture`
+--
+
+DROP TABLE IF EXISTS `moisture`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `moisture` (
+  `DataID` int NOT NULL AUTO_INCREMENT,
+  `BoxID` int DEFAULT NULL,
+  `Moisture` float DEFAULT NULL,
+  `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`DataID`),
+  KEY `BoxID` (`BoxID`),
+  CONSTRAINT `moisture_ibfk_1` FOREIGN KEY (`BoxID`) REFERENCES `planterbox` (`boxID`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `moisture`
+--
+
+LOCK TABLES `moisture` WRITE;
+/*!40000 ALTER TABLE `moisture` DISABLE KEYS */;
+/*!40000 ALTER TABLE `moisture` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -258,6 +312,33 @@ LOCK TABLES `sensordata` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `temperature`
+--
+
+DROP TABLE IF EXISTS `temperature`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `temperature` (
+  `DataID` int NOT NULL AUTO_INCREMENT,
+  `BoxID` int DEFAULT NULL,
+  `Temperature` float DEFAULT NULL,
+  `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`DataID`),
+  KEY `BoxID` (`BoxID`),
+  CONSTRAINT `temperature_ibfk_1` FOREIGN KEY (`BoxID`) REFERENCES `planterbox` (`boxID`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `temperature`
+--
+
+LOCK TABLES `temperature` WRITE;
+/*!40000 ALTER TABLE `temperature` DISABLE KEYS */;
+/*!40000 ALTER TABLE `temperature` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `user`
 --
 
@@ -357,4 +438,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-29 11:05:22
+-- Dump completed on 2022-04-29 23:56:44

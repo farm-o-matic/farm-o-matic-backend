@@ -115,11 +115,7 @@ let waterStopTask = cron.schedule(durationArgs(schedule.wateringschedule[0].time
 
 mqttClient.on('connect', () => {
     console.log('Mqtt broker is connected')
-<<<<<<< HEAD
-    mqttClient.subscribe('sensor/#', { qos: 2, rap: true }, (err) => {
-=======
     mqttClient.subscribe({ 'sensor/#': { qos: 2 } }, (err: any) => {
->>>>>>> 236ec36363a51c18ed2d050b52d6d0410775b8ba
         if (!err) {
             mqttClient.publish('test/1', 'Hello mqtt')
         } else {

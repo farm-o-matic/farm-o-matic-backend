@@ -186,7 +186,7 @@ CREATE TABLE `planterboxsettings` (
   `lightPower` int NOT NULL DEFAULT '50',
   `lightStatus` enum('ON','OFF') NOT NULL DEFAULT 'OFF',
   PRIMARY KEY (`SettingsID`)
-) ENGINE=InnoDB AUTO_INCREMENT=100006 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=100002 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -195,7 +195,7 @@ CREATE TABLE `planterboxsettings` (
 
 LOCK TABLES `planterboxsettings` WRITE;
 /*!40000 ALTER TABLE `planterboxsettings` DISABLE KEYS */;
-INSERT INTO `planterboxsettings` VALUES (0,'Empty',NULL,'Manual','OFF',0,0.8,1000,10000,'Manual','08:00:00','18:00:00',50,'OFF'),(1,'Sunflower',NULL,'Manual','OFF',0.2,0.6,1000,10000,'Manual','08:00:00','17:00:00',55,'OFF'),(2,'Basil',NULL,'Schedule','OFF',0.1,0.75,5000,30000,'Schedule','09:00:00','18:00:00',40,'OFF'),(3,'Cucumber',NULL,'Auto','OFF',0.3,0.65,10000,100000,'Auto','11:00:00','15:00:00',70,'ON');
+INSERT INTO `planterboxsettings` VALUES (1,'Sunflower',NULL,'Manual','OFF',0.2,0.6,1000,10000,'Manual','08:00:00','17:00:00',55,'OFF'),(2,'Basil',NULL,'Schedule','OFF',0.1,0.75,5000,30000,'Schedule','09:00:00','18:00:00',40,'OFF'),(3,'Cucumber',NULL,'Auto','OFF',0.3,0.65,10000,100000,'Auto','11:00:00','15:00:00',70,'ON');
 /*!40000 ALTER TABLE `planterboxsettings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -300,7 +300,7 @@ CREATE TABLE `wateringschedule` (
   PRIMARY KEY (`WSID`),
   KEY `SettingsID` (`SettingsID`),
   CONSTRAINT `wateringschedule_ibfk_1` FOREIGN KEY (`SettingsID`) REFERENCES `planterboxsettings` (`SettingsID`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -324,12 +324,18 @@ CREATE TABLE `wikientry` (
   `entryID` int NOT NULL AUTO_INCREMENT,
   `plantname` varchar(255) NOT NULL,
   `plantdesc` text NOT NULL,
+  `climate` text NOT NULL,
+  `tips` text NOT NULL,
   `fertilizer` text NOT NULL,
   `pesticide` text NOT NULL,
-  `amountofwater` text NOT NULL,
-  `LightExposure` text NOT NULL,
+  `waterAmount` text NOT NULL,
+  `lightexposure` text NOT NULL,
+  `growingtime` text NOT NULL,
+  `waterFreq` varchar(50) DEFAULT NULL,
+  `pesticideFreq` varchar(50) DEFAULT NULL,
+  `weather` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`entryID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -338,7 +344,7 @@ CREATE TABLE `wikientry` (
 
 LOCK TABLES `wikientry` WRITE;
 /*!40000 ALTER TABLE `wikientry` DISABLE KEYS */;
-INSERT INTO `wikientry` VALUES (1,'Sunflower','It\'s a sunflower','test','test','test','test');
+INSERT INTO `wikientry` VALUES (1,'Coriander','Coriander is an annual herb in the family of Apiaceae. It is also known as Chinese parsley, dhania, or cilantro. All parts of the plant are edible, but the fresh leaves and the dried seeds (as a spice) are the parts most traditionally used in cooking. It is a soft plant growing to 50 cm (20 in) tall. The leaves are variable in shape, broadly lobed at the base of the plant, and slender and feathery higher on the flowering stems. The flowers are produced in small umbels and are white or very pale pink in color with the petals pointing away from the center of the umbel longer than those pointing towards it. The plant produces an oval-shaped fruit that is yellow-brown in color and contains two seeds.','The plant grows optimally in areas with damp, cool springs and hot, dry summers at temperatures between 17 and 27°C. The plant can tolerate light frost but hot temperatures will cause the plants to bolt.','- Coriander is best sown directly in pots rather than growing them in seed trays and then transplanting the sprouts.\n- Once the young coriander plants are established, they require little water as the plants do not perform well in damp conditions.\n- The plants will benefit from the addition of fertilizer during the growing season. Phosphorous and potassium often limit the growth of coriander whereas the demand for nitrogen is not very high.\n- The key to growing healthy coriander herb is regular and steady watering. Remember to mulch to keep the soil surface cool.\n- If you live in a hot climate, consider planting your cilantro where it can receive some afternoon shade or in pots that can be periodically moved into the shade. Too much heat and direct sun can cause the plant to bolt (go to seed) early','Cilantro prefers a light, well-drained, moderately fertile loam or sandy soil, but it will tolerate many soils as long as nutrient levels and moisture are monitored.\nCilantro should be fertilized twice. Apply ½ teaspoon of ammonium nitrate (34-0-0) or urea (21-0-0) per square foot.','Aphids: A few sharp sprays of water from the hose and companion planting will keep aphids at bay.\nWhitefly: A few sharp sprays of water from the hose and companion planting will keep whiteflies at bay.\nWilt: Choose disease-resistant varieties and keep leaves dry by providing airflow and watering at the plant’s base.\nMildew: Proper spacing will help with airflow, which can prevent powdery mildew from forming and spreading. Remove any diseased plant and dispose of it to prevent spread.\nLeafspot: Add neem oil to help ward off bacteria. Remove diseased leaves and debris from the garden bed and dispose of immediately.','2.34 mL/day','6 hours/day','45-70 days','twice a day; double the week before harvest','daily','damp and cool'),(2,'Holy Basil','Basil is an annual, or sometimes perennial, herb used for its leaves. Depending on the variety, plants can reach heights of between 30 and 150 cm . Its leaves are richly green and ovate, but otherwise, come in a wide variety of sizes and shapes depending on cultivar. Leaf sizes range from 3 to 11 cm long, and between 1 and 6 cm wide. Basil grows a thick, central taproot. Its flowers are small and white, and grow from a central inflorescence, or spike, that emerges from the central stem atop the plant.[citation needed] Unusual among Lamiaceae, the four stamens and the pistil are not pushed under the upper lip of the corolla, but lie over the inferior lip. After entomophilous pollination, the corolla falls off and four round achenes develop inside the bilabiate calyx.','Basil is sensitive to cold, with best growth in hot, dry conditions. It behaves as an annual if there is any chance of a frost. However, due to its popularity, basil is cultivated in many countries around the world.','- If you live in a hot area, use mulch around the plants (the mulch will help hold in moisture and suppress weeds).\n- After the seedlings have produced their first six leaves, prune to above the second set. This encourages the plants to start branching, resulting in more leaves for harvest.\n- Every time a branch has six to eight leaves, repeat pruning the branches back to their first set of leaves.\n- After about 6 weeks, pinch off the center shoot to prevent early flowering. If flowers do grow, just cut them off.\n- If the weather is going to be cold or if a sudden frost is imminent, be sure to harvest your basil beforehand, as the cold temperatures will destroy your plants.',' Feed your basil plants with a good organic fertilizer every 4-6 weeks for indoor plants and every 2-3 weeks for outdoor. A well-balanced fertilizer with equal amounts of nitrogen, potassium, and phosphate, will help to boost leaf production. Soil should be moderately fertile and moist but well-draining. Basil thrives in rich soil with lots of organic matter, such as compost.','Aphids: To get rid of them, try blasting them with cold water to dislodge them. If that fails, spray the basil plants with insecticidal soap or horticultural oil. You can also purchase beneficial insects such as ladybugs or parasitic wasps.\nFungal Diseases: The preventive measures include rotating plant locations, using a plastic covering to heat the soil to a temperature that kills pathogens and pests, and insuring proper sanitation, aeration, and drainage. If your basil plant does succumb to fungus, pull and get rid of the infected plant before it infects other plants.','16.4 mL/week; keep moist','6-8 hours/day','3-4 weeks','every 3-4 days','daily','hot and dry');
 /*!40000 ALTER TABLE `wikientry` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -351,4 +357,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-26  2:27:29
+-- Dump completed on 2022-04-29 11:05:22

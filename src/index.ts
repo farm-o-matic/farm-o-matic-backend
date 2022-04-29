@@ -147,9 +147,9 @@ mqttClient.on('message', (topic, message) => {
                 storeMoist(1, mess)
                 if(setting.wateringMode == 'Auto'){
                     if (parseFloat(mess) < setting.minMoisture) {
-                        mqttClient.publish('sensor/watering', '0')
+                        mqttClient.publish('sensor/watering', 'on')
                     } else if (parseFloat(mess) >= setting.maxMoisture) {
-                        mqttClient.publish('sensor/watering', '1')
+                        mqttClient.publish('sensor/watering', 'off')
                     }
                 }
             }
@@ -164,6 +164,14 @@ mqttClient.on('message', (topic, message) => {
             case sensor.light:{
                 console.log(sensor.light,mess)
                 storeLight(1, mess)
+                if(setting.lightingMode == 'Auto' && new Date().getTime() < new Date(setting.lightStopTime).getTime()
+                && new Date(setting.lightStartTime).getTime() < new Date().getTime() ){
+                    if (parseFloat(mess) < setting.minLightIntensity) {
+                        mqttClient.publish('lighting', 'on')
+                    } else if (parseFloat(mess) >= setting.maxLightIntensity) {
+                        mqttClient.publish('lighting', 'off')
+                    }
+                }
             }
             default: {
                 console.log(topicSpec[1], mess)

@@ -2,6 +2,7 @@ import { settingModel } from "../Models/setting.model"
 import { requestMethod } from '../Models/requestMethod.model'
 import axios from 'axios'
 import { scheduleModel } from "../Models/schedule.model"
+import { prisma } from '../helper/prisma.client'
 
 export let setting: settingModel = {
     SettingsID: 0,
@@ -73,6 +74,33 @@ export const fetchBoxSchedule = async (id: string) => {
     } catch (error) {
         console.error(error)
     }
+}
+
+export const storeTemp = async (id: number, data: string) => {
+    await prisma.temperature.create({
+        data: {
+            BoxID: id,
+            Temperature: parseFloat(data)
+        }
+    })
+}
+
+export const storeMoist = async (id: number, data: string) => {
+    await prisma.moisture.create({
+        data: {
+            BoxID: id,
+            Moisture: parseFloat(data)
+        }
+    })
+}
+
+export const storeLight = async (id: number, data: string) => {
+    await prisma.lightintensity.create({
+        data: {
+            BoxID: id,
+            lightIntensity: parseFloat(data)
+        }
+    })
 }
 
 export function conArgs(time: string){ //this function converts UTC datetime to a time argument for the cron scheduler

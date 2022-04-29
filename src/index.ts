@@ -3,7 +3,8 @@ import userRouter from './Routes/user.routes'
 import planterboxRouter from './Routes/planterbox.routes'
 import pbsettingRouter from './Routes/pbsetting.routes'
 import wikiRouter from './Routes/wiki.routes'
-import { setting, fetchBoxSetting, conArgs, fetchBoxSchedule, durationArgs, schedule } from './Controllers/scheduler.controller'
+import { setting, fetchBoxSetting, conArgs, fetchBoxSchedule, durationArgs, 
+schedule, storeLight, storeMoist, storeTemp } from './Controllers/scheduler.controller'
 import * as express from 'express'
 import * as cron from 'node-cron'
 //mqtt
@@ -142,12 +143,19 @@ mqttClient.on('message', (topic, message) => {
         switch (topicSpec[1]) {
             case sensor.rh: {
                 console.log('rh', mess)
+                storeMoist(1, mess)
+                if(parseFloat(mess) < setting.minMoisture){
+                    mqttClient.publish('sensor/watering', '0')
+                } else if(parseFloat(mess) >= setting.maxMoisture){
+                    mqttClient.publish('sensor/watering', '1')
+                }
             }
             case sensor.watering: {
                 console.log(sensor.watering, mess)
             }
             case sensor.temp: {
                 console.log(sensor.temp, mess)
+                storeTemp(1, mess)
             }
             default: {
                 console.log(topicSpec[1], mess)

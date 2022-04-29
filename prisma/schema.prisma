@@ -139,13 +139,19 @@ model wateringschedule {
 }
 
 model wikientry {
-  entryID       Int    @id @default(autoincrement())
-  plantname     String @db.VarChar(255)
-  plantdesc     String @db.Text
-  fertilizer    String @db.Text
-  pesticide     String @db.Text
-  amountofwater String @db.Text
-  LightExposure String @db.Text
+  entryID       Int     @id @default(autoincrement())
+  plantname     String  @db.VarChar(255)
+  plantdesc     String  @db.Text
+  climate       String  @db.Text
+  tips          String  @db.Text
+  fertilizer    String  @db.Text
+  pesticide     String  @db.Text
+  waterAmount   String  @db.Text
+  lightexposure String  @db.Text
+  growingtime   String  @db.Text
+  waterFreq     String? @db.VarChar(50)
+  pesticideFreq String? @db.VarChar(50)
+  weather       String? @db.VarChar(100)
 }
 
 enum planterboxsettings_wateringMode {

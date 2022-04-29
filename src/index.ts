@@ -37,9 +37,9 @@ app.listen(port, () => {
 ////CONTROLLER STARTS HERE////
 //////////////////////////////
 
-cron.schedule('*/3 * * * * *', () => { //this scheduler will fecth the settings every minute, but here I set it to 3 sec for testing
-    fetchBoxSetting('2')//I'm getting the settings and schedules for boxID 2 for testing
-    fetchBoxSchedule('2')
+cron.schedule('*/20 * * * * *', () => { //this scheduler will fecth the settings every 20s
+    fetchBoxSetting('1')//I'm getting the settings and schedules for boxID 1
+    fetchBoxSchedule('1')
 
     if (setting.wateringMode == 'Schedule') {
         waterStartTask.start()
@@ -72,28 +72,28 @@ let lightStartTask = cron.schedule(conArgs(setting.lightStartTime), () => {
     console.log('turning lights on')
     timezone: "Asia/Bangkok"
     //put code to TURN ON LIGHTS here
-    mqttClient.publish('command1', '0')
+    mqttClient.publish('lighting', '0')
 })
 
 let lightStopTask = cron.schedule(conArgs(setting.lightStopTime), () => {
     console.log('turning lights off')
     timezone: "Asia/Bangkok"
     //put code to TURN OFF LIGHTS here
-    mqttClient.publish('command1', '1')
+    mqttClient.publish('lighting', '1')
 })
 
 let waterStartTask = cron.schedule(conArgs(schedule.wateringschedule[0].time), () => {
     timezone: "Asia/Bangkok"
     console.log('turninf watering on')
     //put code to TURN ON WATER here
-    mqttClient.publish('command2', '0')
+    mqttClient.publish('sensor/watering', '0')
 })
 
 let waterStopTask = cron.schedule(durationArgs(schedule.wateringschedule[0].time, schedule.wateringschedule[0].duration), () => {
     timezone: "Asia/Bangkok"
     console.log('turninf watering off')
     //put code to TURN OFF WATER here
-    mqttClient.publish('command2', '1')
+    mqttClient.publish('sensor/watering', '1')
 })
 
 ////////////////////////
@@ -134,6 +134,7 @@ enum sensor {
     watering = 'watering',
 
 }
+
 mqttClient.on('message', (topic, message) => {
     const topicSpec = topic.split('/')
     const mess = message.toString()

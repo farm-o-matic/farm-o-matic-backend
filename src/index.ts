@@ -3,7 +3,8 @@ import userRouter from './Routes/user.routes'
 import planterboxRouter from './Routes/planterbox.routes'
 import pbsettingRouter from './Routes/pbsetting.routes'
 import wikiRouter from './Routes/wiki.routes'
-import { setting, fetchBoxSetting, conArgs, fetchBoxSchedule, durationArgs, schedule } from './Controllers/scheduler.controller'
+import { setting, fetchBoxSetting, conArgs, fetchBoxSchedule, durationArgs, 
+schedule, storeLight, storeMoist, storeTemp } from './Controllers/scheduler.controller'
 import * as express from 'express'
 import * as cron from 'node-cron'
 //mqtt
@@ -37,9 +38,9 @@ app.listen(port, () => {
 ////CONTROLLER STARTS HERE////
 //////////////////////////////
 
-cron.schedule('*/3 * * * * *', () => { //this scheduler will fecth the settings every minute, but here I set it to 3 sec for testing
-    fetchBoxSetting('2')//I'm getting the settings and schedules for boxID 2 for testing
-    fetchBoxSchedule('2')
+cron.schedule('*/20 * * * * *', () => { //this scheduler will fecth the settings every 20s
+    fetchBoxSetting('1')//I'm getting the settings and schedules for boxID 1
+    fetchBoxSchedule('1')
 
     if (setting.wateringMode == 'Schedule') {
         waterStartTask.start()
@@ -72,28 +73,28 @@ let lightStartTask = cron.schedule(conArgs(setting.lightStartTime), () => {
     console.log('turning lights on')
     timezone: "Asia/Bangkok"
     //put code to TURN ON LIGHTS here
-    mqttClient.publish('command1', '0')
+    mqttClient.publish('lighting', '0')
 })
 
 let lightStopTask = cron.schedule(conArgs(setting.lightStopTime), () => {
     console.log('turning lights off')
     timezone: "Asia/Bangkok"
     //put code to TURN OFF LIGHTS here
-    mqttClient.publish('command1', '1')
+    mqttClient.publish('lighting', '1')
 })
 
 let waterStartTask = cron.schedule(conArgs(schedule.wateringschedule[0].time), () => {
     timezone: "Asia/Bangkok"
     console.log('turninf watering on')
     //put code to TURN ON WATER here
-    mqttClient.publish('command2', '0')
+    mqttClient.publish('sensor/watering', '0')
 })
 
 let waterStopTask = cron.schedule(durationArgs(schedule.wateringschedule[0].time, schedule.wateringschedule[0].duration), () => {
     timezone: "Asia/Bangkok"
     console.log('turninf watering off')
     //put code to TURN OFF WATER here
-    mqttClient.publish('command2', '1')
+    mqttClient.publish('sensor/watering', '1')
 })
 
 ////////////////////////
@@ -115,7 +116,11 @@ let waterStopTask = cron.schedule(durationArgs(schedule.wateringschedule[0].time
 
 mqttClient.on('connect', () => {
     console.log('Mqtt broker is connected')
+<<<<<<< HEAD
     mqttClient.subscribe('sensor/#', { qos: 2, rap: true }, (err) => {
+=======
+    mqttClient.subscribe({ 'sensor/#': { qos: 2 } }, (err: any) => {
+>>>>>>> 41544a3b117e46b66bc24dcec1454f446afa07d5
         if (!err) {
             mqttClient.publish('test/1', 'Hello mqtt')
         } else {
@@ -135,6 +140,7 @@ enum sensor {
     light = 'light'
 
 }
+
 mqttClient.on('message', (topic, message) => {
     const topicSpec = topic.split('/')
     const mess = message.toString()
@@ -142,12 +148,19 @@ mqttClient.on('message', (topic, message) => {
         switch (topicSpec[1]) {
             case sensor.rh: {
                 console.log('rh', mess)
+                storeMoist(1, mess)
+                if(parseFloat(mess) < setting.minMoisture){
+                    mqttClient.publish('sensor/watering', '0')
+                } else if(parseFloat(mess) >= setting.maxMoisture){
+                    mqttClient.publish('sensor/watering', '1')
+                }
             }
             case sensor.watering: {
                 console.log(sensor.watering, mess)
             }
             case sensor.temp: {
                 console.log(sensor.temp, mess)
+                storeTemp(1, mess)
             }
             case sensor.light:{
                 console.log(sensor.light,mess)

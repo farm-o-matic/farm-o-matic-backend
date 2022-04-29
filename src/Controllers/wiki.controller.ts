@@ -19,7 +19,7 @@ export const searchWiki = async (req: Request, res: Response) => {
 
 export const listPost = async (req: Request, res: Response) => {
     try{
-        const postList = await prisma.post.findMany()
+        const postList = await prisma.wikientry.findMany()
         res.json(postList)
     } catch (error) {
         res.json({ error: 'Something went wrong'})

@@ -63,7 +63,10 @@ model planterbox {
   serialNumber       Int
   planterboxsettings planterboxsettings? @relation(fields: [SettingsID], references: [SettingsID], onUpdate: NoAction, map: "planterbox_ibfk_2")
   user               user                @relation(fields: [ownerID], references: [UserID], onDelete: Cascade, onUpdate: NoAction, map: "planterbox_ibfk_1")
+  lightintensity     lightintensity[]
+  moisture           moisture[]
   sensordata         sensordata[]
+  temperature        temperature[]
 
   @@index([SettingsID], map: "SettingsID")
   @@index([ownerID], map: "ownerID")
@@ -139,13 +142,46 @@ model wateringschedule {
 }
 
 model wikientry {
-  entryID       Int    @id @default(autoincrement())
-  plantname     String @db.VarChar(255)
-  plantdesc     String @db.Text
-  fertilizer    String @db.Text
-  pesticide     String @db.Text
-  amountofwater String @db.Text
-  LightExposure String @db.Text
+  entryID       Int     @id @default(autoincrement())
+  plantname     String  @db.VarChar(255)
+  plantdesc     String  @db.Text
+  climate       String  @db.Text
+  tips          String  @db.Text
+  fertilizer    String  @db.Text
+  pesticide     String  @db.Text
+  waterAmount   String  @db.Text
+  lightexposure String  @db.Text
+  growingtime   String  @db.Text
+  waterFreq     String? @db.VarChar(50)
+  pesticideFreq String? @db.VarChar(50)
+  weather       String? @db.VarChar(100)
+}
+
+model lightintensity {
+  DataID         Int         @id @default(autoincrement())
+  BoxID          Int?
+  lightIntensity Float?      @db.Float
+  planterbox     planterbox? @relation(fields: [BoxID], references: [boxID], onDelete: Cascade, onUpdate: NoAction, map: "lightintensity_ibfk_1")
+
+  @@index([BoxID], map: "BoxID")
+}
+
+model moisture {
+  DataID     Int         @id @default(autoincrement())
+  BoxID      Int?
+  Moisture   Float?      @db.Float
+  planterbox planterbox? @relation(fields: [BoxID], references: [boxID], onDelete: Cascade, onUpdate: NoAction, map: "moisture_ibfk_1")
+
+  @@index([BoxID], map: "BoxID")
+}
+
+model temperature {
+  DataID      Int         @id @default(autoincrement())
+  BoxID       Int?
+  Temperature Float?      @db.Float
+  planterbox  planterbox? @relation(fields: [BoxID], references: [boxID], onDelete: Cascade, onUpdate: NoAction, map: "temperature_ibfk_1")
+
+  @@index([BoxID], map: "BoxID")
 }
 
 enum planterboxsettings_wateringMode {

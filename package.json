@@ -15,6 +15,7 @@
     "@types/bcrypt": "^5.0.0",
     "@types/express": "^4.17.13",
     "@types/node": "^17.0.21",
+    "@types/ws": "^8.5.3",
     "@typescript-eslint/eslint-plugin": "^5.15.0",
     "@typescript-eslint/parser": "^5.15.0",
     "eslint": "^7.32.0",
@@ -38,6 +39,7 @@
     "bcrypt": "^5.0.1",
     "express": "^4.17.3",
     "jsonwebtoken": "^8.5.1",
+    "mqtt": "^4.3.7",
     "node-cron": "^3.0.0",
     "nodemon": "^2.0.15",
     "pg-promise": "^10.11.1"

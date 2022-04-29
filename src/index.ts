@@ -73,28 +73,28 @@ let lightStartTask = cron.schedule(conArgs(setting.lightStartTime), () => {
     console.log('turning lights on')
     timezone: "Asia/Bangkok"
     //put code to TURN ON LIGHTS here
-    mqttClient.publish('lighting', '0')
+    mqttClient.publish('lighting', 'on')
 })
 
 let lightStopTask = cron.schedule(conArgs(setting.lightStopTime), () => {
     console.log('turning lights off')
     timezone: "Asia/Bangkok"
     //put code to TURN OFF LIGHTS here
-    mqttClient.publish('lighting', '1')
+    mqttClient.publish('lighting', 'off')
 })
 
 let waterStartTask = cron.schedule(conArgs(schedule.wateringschedule[0].time), () => {
     timezone: "Asia/Bangkok"
     console.log('turninf watering on')
     //put code to TURN ON WATER here
-    mqttClient.publish('sensor/watering', '0')
+    mqttClient.publish('sensor/watering', 'on')
 })
 
 let waterStopTask = cron.schedule(durationArgs(schedule.wateringschedule[0].time, schedule.wateringschedule[0].duration), () => {
     timezone: "Asia/Bangkok"
     console.log('turninf watering off')
     //put code to TURN OFF WATER here
-    mqttClient.publish('sensor/watering', '1')
+    mqttClient.publish('sensor/watering', 'off')
 })
 
 ////////////////////////
@@ -155,6 +155,7 @@ mqttClient.on('message', (topic, message) => {
             }
             case sensor.watering: {
                 console.log(sensor.watering, mess)
+
             }
             case sensor.temp: {
                 console.log(sensor.temp, mess)
@@ -162,6 +163,7 @@ mqttClient.on('message', (topic, message) => {
             }
             case sensor.light:{
                 console.log(sensor.light,mess)
+                storeLight(1, mess)
             }
             default: {
                 console.log(topicSpec[1], mess)

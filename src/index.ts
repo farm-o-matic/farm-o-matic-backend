@@ -4,7 +4,7 @@ import planterboxRouter from './Routes/planterbox.routes'
 import pbsettingRouter from './Routes/pbsetting.routes'
 import wikiRouter from './Routes/wiki.routes'
 import { setting, fetchBoxSetting, conArgs, fetchBoxSchedule, durationArgs, 
-schedule, storeLight, storeMoist, storeTemp } from './Controllers/scheduler.controller'
+schedule, storeLight, storeMoist, storeTemp, LEDpower } from './Controllers/scheduler.controller'
 import * as express from 'express'
 import * as cron from 'node-cron'
 //mqtt
@@ -73,7 +73,7 @@ let lightStartTask = cron.schedule(conArgs(setting.lightStartTime), () => {
     console.log('turning lights on')
     timezone: "Asia/Bangkok"
     //put code to TURN ON LIGHTS here
-    mqttClient.publish('lighting', 'on')
+    mqttClient.publish('lighting', LEDpower(setting.lightPower))
 })
 
 let lightStopTask = cron.schedule(conArgs(setting.lightStopTime), () => {
@@ -167,7 +167,7 @@ mqttClient.on('message', (topic, message) => {
                 if(setting.lightingMode == 'Auto' && new Date().getTime() < new Date(setting.lightStopTime).getTime()
                 && new Date(setting.lightStartTime).getTime() < new Date().getTime() ){
                     if (parseFloat(mess) < setting.minLightIntensity) {
-                        mqttClient.publish('lighting', 'on')
+                        mqttClient.publish('lighting', LEDpower(setting.lightPower))
                     } else if (parseFloat(mess) >= setting.maxLightIntensity) {
                         mqttClient.publish('lighting', 'off')
                     }

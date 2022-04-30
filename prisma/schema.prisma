@@ -161,6 +161,7 @@ model lightintensity {
   DataID         Int         @id @default(autoincrement())
   BoxID          Int?
   lightIntensity Float?      @db.Float
+  timestamp      DateTime?   @default(now()) @db.Timestamp(0)
   planterbox     planterbox? @relation(fields: [BoxID], references: [boxID], onDelete: Cascade, onUpdate: NoAction, map: "lightintensity_ibfk_1")
 
   @@index([BoxID], map: "BoxID")
@@ -170,6 +171,7 @@ model moisture {
   DataID     Int         @id @default(autoincrement())
   BoxID      Int?
   Moisture   Float?      @db.Float
+  timestamp  DateTime?   @default(now()) @db.Timestamp(0)
   planterbox planterbox? @relation(fields: [BoxID], references: [boxID], onDelete: Cascade, onUpdate: NoAction, map: "moisture_ibfk_1")
 
   @@index([BoxID], map: "BoxID")
@@ -179,6 +181,7 @@ model temperature {
   DataID      Int         @id @default(autoincrement())
   BoxID       Int?
   Temperature Float?      @db.Float
+  timestamp   DateTime?   @default(now()) @db.Timestamp(0)
   planterbox  planterbox? @relation(fields: [BoxID], references: [boxID], onDelete: Cascade, onUpdate: NoAction, map: "temperature_ibfk_1")
 
   @@index([BoxID], map: "BoxID")

@@ -34,7 +34,7 @@ export let schedule: scheduleModel = {
             WSID: 0,
             SettingsID: 0,
             time: '1970-01-01t00:00:00.000z',
-            duration: 0
+            duration: 1
         }
     ],
     pesticideschedule: [
@@ -111,4 +111,14 @@ export function conArgs(time: string){ //this function converts UTC datetime to 
 export function durationArgs(time: string, duration: number){ //this function is for stopping watering. It will return: time + duration
     const dateTime = new Date(time)
     return duration + dateTime.getUTCMinutes() + ' ' + dateTime.getUTCHours() + ' * * *'
+}
+
+export function LEDpower(power: number){
+    if(power < 33){
+        return 'low'
+    }else if(power < 66){
+        return 'med'
+    }else{
+        return 'high'
+    }
 }

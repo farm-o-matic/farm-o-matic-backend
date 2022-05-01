@@ -71,27 +71,27 @@ cron.schedule('*/20 * * * * *', () => { //this scheduler will fecth the settings
 
 let lightStartTask = cron.schedule(conArgs(setting.lightStartTime), () => {
     console.log('turning lights on')
-    timezone: "Asia/Bangkok"
+    // timezone: "Asia/Bangkok"
     //put code to TURN ON LIGHTS here
     mqttClient.publish('lighting', LEDpower(setting.lightPower))
 })
 
 let lightStopTask = cron.schedule(conArgs(setting.lightStopTime), () => {
     console.log('turning lights off')
-    timezone: "Asia/Bangkok"
+    // timezone: "Asia/Bangkok"
     //put code to TURN OFF LIGHTS here
     mqttClient.publish('lighting', 'off')
 })
 
 let waterStartTask = cron.schedule(conArgs(schedule.wateringschedule[0].time), () => {
-    timezone: "Asia/Bangkok"
+    // timezone: "Asia/Bangkok"
     console.log('turninf watering on')
     //put code to TURN ON WATER here
     mqttClient.publish('sensor/watering', 'on')
 })
 
 let waterStopTask = cron.schedule(durationArgs(schedule.wateringschedule[0].time, schedule.wateringschedule[0].duration), () => {
-    timezone: "Asia/Bangkok"
+    // timezone: "Asia/Bangkok"
     console.log('turninf watering off')
     //put code to TURN OFF WATER here
     mqttClient.publish('sensor/watering', 'off')
@@ -148,8 +148,7 @@ mqttClient.on('message', (topic, message) => {
                 if(setting.wateringMode == 'Auto'){
                     if (parseFloat(mess) < setting.minMoisture) {
                         mqttClient.publish('sensor/watering', 'on')
-                    } else if (parseFloat(mess) >= setting.maxMoisture) {
-                        mqttClient.publish('sensor/watering', 'off')
+                        setTimeout(() => mqttClient.publish('sensor/watering', 'off'),3000)
                     }
                 }
             }
@@ -164,8 +163,10 @@ mqttClient.on('message', (topic, message) => {
             case sensor.light:{
                 console.log(sensor.light,mess)
                 storeLight(1, mess)
-                if(setting.lightingMode == 'Auto' && new Date().getTime() < new Date(setting.lightStopTime).getTime()
-                && new Date(setting.lightStartTime).getTime() < new Date().getTime() ){
+                const timeNow = new Date().getTime()
+                const startTime = new Date(setting.lightStartTime).getTime()
+                const stopTime = new Date(setting.lightStopTime).getTime()
+                if(setting.lightingMode == 'Auto' && timeNow < stopTime && startTime < timeNow ){
                     if (parseFloat(mess) < setting.minLightIntensity) {
                         mqttClient.publish('lighting', LEDpower(setting.lightPower))
                     } else if (parseFloat(mess) >= setting.maxLightIntensity) {

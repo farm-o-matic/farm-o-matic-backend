@@ -143,7 +143,7 @@ mqttClient.on('message', (topic, message) => {
     if (topicSpec[0] === 'sensor') {
         switch (topicSpec[1]) {
             case sensor.rh: {
-                console.log('rh', mess)
+                console.log(sensor.rh, mess)
                 storeMoist(1, mess)
                 if(setting.wateringMode == 'Auto'){
                     if (parseFloat(mess) < setting.minMoisture) {

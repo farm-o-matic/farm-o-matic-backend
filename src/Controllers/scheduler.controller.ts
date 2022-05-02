@@ -65,7 +65,7 @@ export const fetchBoxSchedule = async (id: string) => {
             url: 'http://localhost:3000/pbsetting/'+id+'/schedules',
         }
         schedule = (await axios.request(config)).data
-        console.log(schedule)
+        // console.log(schedule)
     } catch (error) {
         console.error(error)
     }

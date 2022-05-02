@@ -85,14 +85,14 @@ let lightStopTask = cron.schedule(conArgs(setting.lightStopTime), () => {
 
 let waterStartTask = cron.schedule(conArgs(schedule.wateringschedule[0].time), () => {
     // timezone: "Asia/Bangkok"
-    console.log('turninf watering on')
+    console.log('turning watering on')
     //put code to TURN ON WATER here
     mqttClient.publish('sensor/watering', 'on')
 })
 
 let waterStopTask = cron.schedule(durationArgs(schedule.wateringschedule[0].time, schedule.wateringschedule[0].duration), () => {
     // timezone: "Asia/Bangkok"
-    console.log('turninf watering off')
+    console.log('turning watering off')
     //put code to TURN OFF WATER here
     mqttClient.publish('sensor/watering', 'off')
 })
@@ -139,11 +139,11 @@ enum sensor {
 mqttClient.on('message', (topic, message) => {
     const topicSpec = topic.split('/')
     const mess = message.toString()
-    console.log(topicSpec)
+    // console.log(topicSpec)
     if (topicSpec[0] === 'sensor') {
         switch (topicSpec[1]) {
             case sensor.rh: {
-                console.log(topicSpec[1], mess)
+                console.log(sensor.rh, mess)
                 storeMoist(mess)
                 if(setting.wateringMode == 'Auto'){
                     if (parseFloat(mess.split(',')[1]) < setting.minMoisture) {
@@ -151,13 +151,15 @@ mqttClient.on('message', (topic, message) => {
                         setTimeout(() => mqttClient.publish('sensor/watering', 'off'),3000)
                     }
                 }
+                break
             }
             case sensor.temp: {
-                console.log(topicSpec[1], mess)
+                console.log(sensor.temp, mess)
                 storeTemp(mess)
+                break
             }
             case sensor.light:{
-                console.log(topicSpec[1],mess)
+                console.log(sensor.light, mess)
 
                 storeLight(mess)
                 const timeNow = new Date().getTime()
@@ -172,9 +174,10 @@ mqttClient.on('message', (topic, message) => {
                     }
                 }
             }
+            break
         }
     } else {
-        console.log('not logged'+topicSpec)
+        console.log('not logged' + topicSpec)
     }
     //TUM ADD TO DATABASE WITH THIS NA. 
 })

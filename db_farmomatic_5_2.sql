@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.28, for Win64 (x86_64)
 --
--- Host: localhost    Database: database_farmomatic_auto
+-- Host: 127.0.0.1    Database: database_farmomatic_auto
 -- ------------------------------------------------------
 -- Server version	8.0.28
 
@@ -120,7 +120,7 @@ CREATE TABLE `lightintensity` (
   PRIMARY KEY (`DataID`),
   KEY `BoxID` (`BoxID`),
   CONSTRAINT `lightintensity_ibfk_1` FOREIGN KEY (`BoxID`) REFERENCES `planterbox` (`boxID`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -129,7 +129,6 @@ CREATE TABLE `lightintensity` (
 
 LOCK TABLES `lightintensity` WRITE;
 /*!40000 ALTER TABLE `lightintensity` DISABLE KEYS */;
-INSERT INTO `lightintensity` VALUES (5,1,25.37,'2022-04-29 17:01:49'),(6,1,NULL,'2022-04-29 17:01:49'),(7,1,1563,'2022-04-29 17:01:49'),(8,1,9,'2022-04-29 17:01:49'),(9,1,98,'2022-04-30 12:33:24'),(10,1,NULL,'2022-04-30 12:33:24'),(11,1,15,'2022-04-30 12:33:24'),(12,1,23.19,'2022-04-30 12:33:24');
 /*!40000 ALTER TABLE `lightintensity` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -148,7 +147,7 @@ CREATE TABLE `moisture` (
   PRIMARY KEY (`DataID`),
   KEY `BoxID` (`BoxID`),
   CONSTRAINT `moisture_ibfk_1` FOREIGN KEY (`BoxID`) REFERENCES `planterbox` (`boxID`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -157,7 +156,6 @@ CREATE TABLE `moisture` (
 
 LOCK TABLES `moisture` WRITE;
 /*!40000 ALTER TABLE `moisture` DISABLE KEYS */;
-INSERT INTO `moisture` VALUES (2,1,1563,'2022-04-29 17:01:49'),(3,1,15,'2022-04-30 12:33:24');
 /*!40000 ALTER TABLE `moisture` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -206,7 +204,7 @@ CREATE TABLE `planterbox` (
   KEY `SettingsID` (`SettingsID`),
   CONSTRAINT `planterbox_ibfk_1` FOREIGN KEY (`ownerID`) REFERENCES `user` (`UserID`) ON DELETE CASCADE,
   CONSTRAINT `planterbox_ibfk_2` FOREIGN KEY (`SettingsID`) REFERENCES `planterboxsettings` (`SettingsID`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=125 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -215,7 +213,7 @@ CREATE TABLE `planterbox` (
 
 LOCK TABLES `planterbox` WRITE;
 /*!40000 ALTER TABLE `planterbox` DISABLE KEYS */;
-INSERT INTO `planterbox` VALUES (1,1,1,1),(2,1,2,2),(3,1,3,3);
+INSERT INTO `planterbox` VALUES (1,1,1,1),(2,1,2,2),(3,1,3,3),(124,1,1,4);
 /*!40000 ALTER TABLE `planterbox` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -251,7 +249,7 @@ CREATE TABLE `planterboxsettings` (
 
 LOCK TABLES `planterboxsettings` WRITE;
 /*!40000 ALTER TABLE `planterboxsettings` DISABLE KEYS */;
-INSERT INTO `planterboxsettings` VALUES (0,'Empty',NULL,'Manual','OFF',0,0.8,1000,10000,'Manual','08:00:00','18:00:00',50,'OFF'),(1,'Sunflower',NULL,'Manual','OFF',0.2,0.6,1000,10000,'Manual','08:00:00','17:00:00',55,'OFF'),(2,'Basil',NULL,'Schedule','OFF',0.1,0.75,5000,30000,'Schedule','09:00:00','18:00:00',40,'OFF'),(3,'Cucumber',NULL,'Auto','OFF',0.3,0.65,10000,100000,'Auto','11:00:00','15:00:00',70,'ON');
+INSERT INTO `planterboxsettings` VALUES (0,'Empty',NULL,'Manual','OFF',0,80,1000,10000,'Manual','08:00:00','18:00:00',50,'OFF'),(1,'Coriander',NULL,'Manual','OFF',20,60,600,5000,'Manual','08:00:00','17:00:00',55,'OFF'),(2,'Holy Basil',NULL,'Schedule','OFF',30,55,800,7000,'Schedule','09:00:00','18:00:00',40,'OFF'),(3,'Sunflower Sprout',NULL,'Auto','OFF',25,65,1000,8000,'Auto','11:00:00','15:00:00',70,'ON');
 /*!40000 ALTER TABLE `planterboxsettings` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -360,7 +358,7 @@ CREATE TABLE `temperature` (
   PRIMARY KEY (`DataID`),
   KEY `BoxID` (`BoxID`),
   CONSTRAINT `temperature_ibfk_1` FOREIGN KEY (`BoxID`) REFERENCES `planterbox` (`boxID`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -369,7 +367,6 @@ CREATE TABLE `temperature` (
 
 LOCK TABLES `temperature` WRITE;
 /*!40000 ALTER TABLE `temperature` DISABLE KEYS */;
-INSERT INTO `temperature` VALUES (4,1,25.37,'2022-04-29 17:01:49'),(5,1,1563,'2022-04-29 17:01:49'),(6,1,NULL,'2022-04-29 17:01:49'),(7,1,15,'2022-04-30 12:33:24'),(8,1,NULL,'2022-04-30 12:33:24'),(9,1,23.19,'2022-04-30 12:33:24');
 /*!40000 ALTER TABLE `temperature` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -425,7 +422,7 @@ CREATE TABLE `wateringschedule` (
 
 LOCK TABLES `wateringschedule` WRITE;
 /*!40000 ALTER TABLE `wateringschedule` DISABLE KEYS */;
-INSERT INTO `wateringschedule` VALUES (1,1,'06:00:00',10),(2,2,'07:30:00',5),(3,3,'02:30:00',20);
+INSERT INTO `wateringschedule` VALUES (1,1,'06:00:00',2),(2,2,'07:30:00',5),(3,3,'02:30:00',3);
 /*!40000 ALTER TABLE `wateringschedule` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -473,4 +470,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-05-01  2:57:20
+-- Dump completed on 2022-05-02 15:07:56

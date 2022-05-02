@@ -14,9 +14,9 @@ export const getSchedule = async(req: Request, res: Response) =>{
     })
     if (setting){
         const schedules = {
-            fertilizerschedule: setting['fertilizerschedule'],
-            wateringschedule: setting['wateringschedule'],
-            pesticideschedule: setting['pesticideschedule']
+            fertilizerschedule: setting['fertilizerschedule'][0],
+            wateringschedule: setting['wateringschedule'][0],
+            pesticideschedule: setting['pesticideschedule'][0]
         }
         return res.json(schedules)
     }

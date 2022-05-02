@@ -73,14 +73,14 @@ let lightStartTask = cron.schedule(conArgs(setting.lightStartTime), () => {
     console.log('turning lights on')
     // timezone: "Asia/Bangkok"
     //put code to TURN ON LIGHTS here
-    mqttClient.publish('lighting', LEDpower(setting.lightPower))
+    mqttClient.publish('sensor/led', LEDpower(setting.lightPower))
 })
 
 let lightStopTask = cron.schedule(conArgs(setting.lightStopTime), () => {
     console.log('turning lights off')
     // timezone: "Asia/Bangkok"
     //put code to TURN OFF LIGHTS here
-    mqttClient.publish('lighting', 'off')
+    mqttClient.publish('sensor/led', 'off')
 })
 
 let waterStartTask = cron.schedule(conArgs(schedule.wateringschedule[0].time), () => {
@@ -132,7 +132,6 @@ mqttClient.on('disconnect', () => {
 enum sensor {
     rh = 'rh',
     temp = 'temp',
-    watering = 'watering',
     light = 'light'
 
 }
@@ -140,46 +139,42 @@ enum sensor {
 mqttClient.on('message', (topic, message) => {
     const topicSpec = topic.split('/')
     const mess = message.toString()
+    console.log(topicSpec)
     if (topicSpec[0] === 'sensor') {
         switch (topicSpec[1]) {
             case sensor.rh: {
-                console.log(sensor.rh, mess)
-                storeMoist(1, mess)
+                console.log(topicSpec[1], mess)
+                storeMoist(mess)
                 if(setting.wateringMode == 'Auto'){
-                    if (parseFloat(mess) < setting.minMoisture) {
+                    if (parseFloat(mess.split(',')[1]) < setting.minMoisture) {
                         mqttClient.publish('sensor/watering', 'on')
                         setTimeout(() => mqttClient.publish('sensor/watering', 'off'),3000)
                     }
                 }
             }
-            case sensor.watering: {
-                console.log(sensor.watering, mess)
-
-            }
             case sensor.temp: {
-                console.log(sensor.temp, mess)
-                storeTemp(1, mess)
+                console.log(topicSpec[1], mess)
+                storeTemp(mess)
             }
             case sensor.light:{
-                console.log(sensor.light,mess)
-                storeLight(1, mess)
+                console.log(topicSpec[1],mess)
+
+                storeLight(mess)
                 const timeNow = new Date().getTime()
                 const startTime = new Date(setting.lightStartTime).getTime()
                 const stopTime = new Date(setting.lightStopTime).getTime()
+
                 if(setting.lightingMode == 'Auto' && timeNow < stopTime && startTime < timeNow ){
-                    if (parseFloat(mess) < setting.minLightIntensity) {
-                        mqttClient.publish('lighting', LEDpower(setting.lightPower))
-                    } else if (parseFloat(mess) >= setting.maxLightIntensity) {
-                        mqttClient.publish('lighting', 'off')
+                    if (parseFloat(mess.split(',')[1]) < setting.minLightIntensity) {
+                        mqttClient.publish('sensor/led', LEDpower(setting.lightPower))
+                    } else if (parseFloat(mess.split(',')[1]) >= setting.maxLightIntensity) {
+                        mqttClient.publish('sensor/led', 'off')
                     }
                 }
             }
-            default: {
-                console.log(topicSpec[1], mess)
-            }
         }
     } else {
-        console.log(topicSpec)
+        console.log('not logged'+topicSpec)
     }
     //TUM ADD TO DATABASE WITH THIS NA. 
 })

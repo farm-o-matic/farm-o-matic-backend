@@ -76,29 +76,32 @@ export const fetchBoxSchedule = async (id: string) => {
     }
 }
 
-export const storeTemp = async (id: number, data: string) => {
+export const storeTemp = async (data: string) => {
+    const message = data.split(',')
     await prisma.temperature.create({
         data: {
-            BoxID: id,
-            Temperature: parseFloat(data)
+            BoxID: parseInt(message[0]),
+            Temperature: parseFloat(message[1])
         }
     })
 }
 
-export const storeMoist = async (id: number, data: string) => {
+export const storeMoist = async (data: string) => {
+    const message = data.split(',')
     await prisma.moisture.create({
         data: {
-            BoxID: id,
-            Moisture: parseFloat(data)
+            BoxID: parseInt(message[0]),
+            Moisture: parseFloat(message[1])
         }
     })
 }
 
-export const storeLight = async (id: number, data: string) => {
+export const storeLight = async (data: string) => {
+    const message = data.split(',')
     await prisma.lightintensity.create({
         data: {
-            BoxID: id,
-            lightIntensity: parseFloat(data)
+            BoxID: parseInt(message[0]),
+            lightIntensity: parseFloat(message[1])
         }
     })
 }

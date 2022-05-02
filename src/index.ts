@@ -83,14 +83,14 @@ let lightStopTask = cron.schedule(conArgs(setting.lightStopTime), () => {
     mqttClient.publish('sensor/led', 'off')
 })
 
-let waterStartTask = cron.schedule(conArgs(schedule.wateringschedule[0].time), () => {
+let waterStartTask = cron.schedule(conArgs(schedule.wateringschedule.time), () => {
     // timezone: "Asia/Bangkok"
     console.log('turning watering on')
     //put code to TURN ON WATER here
     mqttClient.publish('sensor/watering', 'on')
 })
 
-let waterStopTask = cron.schedule(durationArgs(schedule.wateringschedule[0].time, schedule.wateringschedule[0].duration), () => {
+let waterStopTask = cron.schedule(durationArgs(schedule.wateringschedule.time, schedule.wateringschedule.duration), () => {
     // timezone: "Asia/Bangkok"
     console.log('turning watering off')
     //put code to TURN OFF WATER here

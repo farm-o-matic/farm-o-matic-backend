@@ -1,26 +1,20 @@
 export interface scheduleModel {
-    fertilizerschedule: [
-        {
+    fertilizerschedule: {
             FSID: number,
             SettingsID: number,
             time: string,
             Interval: number
-        }
-    ],
-    wateringschedule: [
-        {
+        },
+    wateringschedule: {
             WSID: number,
             SettingsID: number,
             time: string,
             duration: number
-        }
-    ],
-    pesticideschedule: [
-        {
+        },
+    pesticideschedule: {
             PSID: number,
             SettingsID: number,
             time: string,
             Interval: number
         }
-    ]
 }

@@ -21,30 +21,24 @@ export let setting: settingModel = {
     lightStatus: 'OFF'
 }
 export let schedule: scheduleModel = {
-    fertilizerschedule: [
-        {
+    fertilizerschedule: {
             FSID: 0,
             SettingsID: 0,
             time: '1970-01-01t00:00:00.000z',
             Interval: 10
-        }
-    ],
-    wateringschedule: [
-        {
+        },
+    wateringschedule: {
             WSID: 0,
             SettingsID: 0,
             time: '1970-01-01t00:00:00.000z',
             duration: 1
-        }
-    ],
-    pesticideschedule: [
-        {
+        },
+    pesticideschedule: {
             PSID: 0,
             SettingsID: 0,
             time: '1970-01-01t00:00:00.000z',
             Interval: 10
         }
-    ]
 }
 
 export const fetchBoxSetting = async (id: string) => {
@@ -71,6 +65,7 @@ export const fetchBoxSchedule = async (id: string) => {
             url: 'http://localhost:3000/pbsetting/'+id+'/schedules',
         }
         schedule = (await axios.request(config)).data
+        console.log(schedule)
     } catch (error) {
         console.error(error)
     }

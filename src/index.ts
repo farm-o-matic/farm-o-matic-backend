@@ -147,8 +147,8 @@ mqttClient.on('message', (topic, message) => {
                 storeMoist(mess)
                 if(setting.wateringMode == 'Auto'){
                     if (parseFloat(mess.split(',')[1]) < setting.minMoisture) {
-                        mqttClient.publish('sensor/watering', 'on')
-                        setTimeout(() => mqttClient.publish('sensor/watering', 'off'),3000)
+                        mqttClient.publish('sensor/watering', mess.split(',')[0]+',on')
+                        setTimeout(() => mqttClient.publish('sensor/watering', mess.split(',')[0]+',off'),3000)
                     }
                 }
                 break
@@ -168,9 +168,9 @@ mqttClient.on('message', (topic, message) => {
 
                 if(setting.lightingMode == 'Auto' && timeNow < stopTime && startTime < timeNow ){
                     if (parseFloat(mess.split(',')[1]) < setting.minLightIntensity) {
-                        mqttClient.publish('sensor/led', LEDpower(setting.lightPower))
+                        mqttClient.publish('sensor/led', mess.split(',')[0]+','+LEDpower(setting.lightPower))
                     } else if (parseFloat(mess.split(',')[1]) >= setting.maxLightIntensity) {
-                        mqttClient.publish('sensor/led', 'off')
+                        mqttClient.publish('sensor/led', mess.split(',')[0]+','+'off')
                     }
                 }
             }

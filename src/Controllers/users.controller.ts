@@ -7,7 +7,7 @@ import { registerValidation } from '../helper/validator.user'
 import { loginModel } from '../Models/login.model'
 import { userIDModel } from '../Models/userID.model'
 
-const salt = 10;
+const salt = process.env.SALT || 10;
 
 export const register = async (req: Request, res: Response) => {
 	let result: returnModel = {

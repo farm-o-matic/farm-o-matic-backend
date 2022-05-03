@@ -3,7 +3,7 @@ import { requestMethod } from '../Models/requestMethod.model'
 import axios from 'axios'
 import { scheduleModel } from "../Models/schedule.model"
 import { prisma } from '../helper/prisma.client'
-const port = process.env.PORT
+const port = process.env.PORT || 3000
 export let setting: settingModel = {
     SettingsID: 0,
     SettingName: 'Blank',

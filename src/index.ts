@@ -13,7 +13,7 @@ import * as cron from 'node-cron'
 import { mqttClient } from './helper/mqtt.client'
 
 const app: Application = express()
-const port: Number = 3000
+const port = process.env.PORT
 
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())

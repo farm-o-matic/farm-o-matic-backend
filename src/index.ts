@@ -138,18 +138,18 @@ enum sensor {
 }
 
 mqttClient.on('message', (topic, message) => {
-    const topicSpec = topic.split('/')
-    const mess = message.toString()
+    const topicSpec:string[] = topic.split('/')
+    const mess:string[] = message.toString().split(',')
     if (topicSpec[0] === 'sensor') {
         switch (topicSpec[1]) {
             case sensor.rh: {
                 console.log('rh', mess)
-                storeMoist(1, mess)
+                storeMoist(parseInt(mess[0]), mess[1])
                 if(setting.wateringMode == 'Auto'){
-                    if (parseFloat(mess) < setting.minMoisture) {
-                        mqttClient.publish('sensor/watering', '0')
-                    } else if (parseFloat(mess) >= setting.maxMoisture) {
-                        mqttClient.publish('sensor/watering', '1')
+                    if (parseFloat(mess[1]) < setting.minMoisture) {
+                        mqttClient.publish('sensor/watering', mess[0]+'off')
+                    } else if (parseFloat(mess[1]) >= setting.maxMoisture) {
+                        mqttClient.publish('sensor/watering', mess[0]+'on')
                     }
                 }
             }
@@ -158,7 +158,7 @@ mqttClient.on('message', (topic, message) => {
             }
             case sensor.temp: {
                 console.log(sensor.temp, mess)
-                storeTemp(1, mess)
+                storeTemp(parseInt(mess[0]), mess[1])
             }
             case sensor.light:{
                 console.log(sensor.light,mess)

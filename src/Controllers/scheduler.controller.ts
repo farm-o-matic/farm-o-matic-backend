@@ -3,7 +3,7 @@ import { requestMethod } from '../Models/requestMethod.model'
 import axios from 'axios'
 import { scheduleModel } from "../Models/schedule.model"
 import { prisma } from '../helper/prisma.client'
-
+const port = process.env.PORT
 export let setting: settingModel = {
     SettingsID: 0,
     SettingName: 'Blank',
@@ -46,7 +46,7 @@ export const fetchBoxSetting = async (id: string) => {
         const config = {
             method: requestMethod.post,
             headers: { 'content-type': 'application/json' },
-            url: 'http://localhost:3000/planterbox/settings',
+            url: `http://localhost:${port}/planterbox/settings`,
             data: JSON.stringify({
                 id: id,
             }),
@@ -62,7 +62,7 @@ export const fetchBoxSchedule = async (id: string) => {
         const config = {
             method: requestMethod.get,
             headers: { 'content-type': 'application/json' },
-            url: 'http://localhost:3000/pbsetting/'+id+'/schedules',
+            url: `http://localhost:${port}/pbsetting/`+id+'/schedules',
         }
         schedule = (await axios.request(config)).data
         // console.log(schedule)

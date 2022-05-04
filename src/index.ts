@@ -11,6 +11,7 @@ import * as cron from 'node-cron'
 // import { mqttBrokerInterface } from './Models/mqttBroker.model'
 // import * as mqtt from "mqtt"
 import { mqttClient } from './helper/mqtt.client'
+import { db_opt } from './helper/db.optimizer'
 
 const app: Application = express()
 const port = process.env.PORT || 3000
@@ -29,7 +30,7 @@ app.use('/planterbox', planterboxRouter)
 app.use('/pbsetting', pbsettingRouter)
 
 app.use('/wiki', wikiRouter)
-
+app.get('/test',db_opt)
 app.listen(port, () => {
     console.log(`The application is listening on port ${port}! \nor click: http://localhost:${port}/`)
 })

@@ -98,8 +98,9 @@ let waterStopTask = cron.schedule(durationArgs(schedule.wateringschedule.time, s
     mqttClient.publish('sensor/watering', 'off')
 })
 
-cron.schedule('59 59 23 * * *', () => {
-    db_opt
+cron.schedule('59 59 16 * * *', () => {
+    console.log('optimizing database')
+    db_opt()
 })
 
 ////////////////////////

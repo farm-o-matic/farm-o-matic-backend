@@ -169,9 +169,12 @@ mqttClient.on('message', (topic, message) => {
                 console.log(sensor.light, mess)
 
                 storeLight(mess)
-                const timeNow = new Date().getTime()
+                const timeNow = new Date("1970-01-01T07:48:00.000").getTime()
+                // console.log('timenow: '+timeNow)
                 const startTime = new Date(setting.lightStartTime).getTime()
+                // console.log('startTime: '+startTime)
                 const stopTime = new Date(setting.lightStopTime).getTime()
+                // console.log("stopTime: "+stopTime)
 
                 if(setting.lightingMode == 'Auto' && timeNow < stopTime && startTime < timeNow ){
                     if (parseFloat(mess.split(',')[1]) < setting.minLightIntensity) {

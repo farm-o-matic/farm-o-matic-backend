@@ -42,6 +42,7 @@ app.listen(port, () => {
 cron.schedule('*/20 * * * * *', () => { //this scheduler will fecth the settings every 20s
     fetchBoxSetting('1')//I'm getting the settings and schedules for boxID 1
     fetchBoxSchedule('1')
+    // console.log(setting.SettingName)
 
     if (setting.wateringMode == 'Schedule') {
         waterStartTask.start()
@@ -169,7 +170,7 @@ mqttClient.on('message', (topic, message) => {
                 console.log(sensor.light, mess)
 
                 storeLight(mess)
-                const timeNow = new Date("1970-01-01T07:48:00.000").getTime()
+                const timeNow = new Date("1970-01-01T08:46:00.000Z").getTime()
                 // console.log('timenow: '+timeNow)
                 const startTime = new Date(setting.lightStartTime).getTime()
                 // console.log('startTime: '+startTime)

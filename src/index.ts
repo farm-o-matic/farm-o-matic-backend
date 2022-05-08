@@ -153,6 +153,7 @@ mqttClient.on('message', (topic, message) => {
                 storeMoist(mess)
                 if(setting.wateringMode == 'Auto'){
                     if (parseFloat(mess.split(',')[1]) < setting.minMoisture) {
+                        console.log('auto watering')
                         mqttClient.publish('sensor/watering', mess.split(',')[0]+',on')
                         setTimeout(() => mqttClient.publish('sensor/watering', mess.split(',')[0]+',off'),3000)
                     }
@@ -174,8 +175,10 @@ mqttClient.on('message', (topic, message) => {
 
                 if(setting.lightingMode == 'Auto' && timeNow < stopTime && startTime < timeNow ){
                     if (parseFloat(mess.split(',')[1]) < setting.minLightIntensity) {
+                        console.log('auto lights on')
                         mqttClient.publish('sensor/led', mess.split(',')[0]+','+LEDpower(setting.lightPower))
                     } else if (parseFloat(mess.split(',')[1]) >= setting.maxLightIntensity) {
+                        console.log('auto light off')
                         mqttClient.publish('sensor/led', mess.split(',')[0]+','+'off')
                     }
                 }
